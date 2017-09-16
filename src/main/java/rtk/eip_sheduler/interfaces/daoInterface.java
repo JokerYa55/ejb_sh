@@ -21,26 +21,6 @@ public interface daoInterface<T, V> {
      */
     public EntityManager getEM();
 
-    /**
-     *
-     * @param id
-     * @return
-     */
-    public T getItem(V id);
-
-    /**
-     *
-     * @return
-     */
-    public List<T> getList();
-
-    /**
-     *
-     * @param startIdx
-     * @param stopIdx
-     * @return
-     */
-    public List<T> getList(V startIdx, V stopIdx);
 
     /**
      *
@@ -112,4 +92,59 @@ public interface daoInterface<T, V> {
         return null;
     }
     
+    /**
+     * 
+     * @param id
+     * @param jpqName
+     * @param cl
+     * @return 
+     */
+    default public T  getItem(long id, String jpqName, Class<T> cl)
+    {
+        T res = null;
+        try {
+            EntityManager em = getEM();
+            TypedQuery<T> namedQuery = em.createNamedQuery(jpqName, cl);
+            namedQuery.setParameter("id", id);
+            res = namedQuery.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+    
+    /**
+     * 
+     * @param jpqName
+     * @param cl
+     * @return 
+     */
+    default public List<T>  getList(String jpqName, Class<T> cl)
+    {
+        List<T> res = null;
+        try {
+            EntityManager em = getEM();
+            TypedQuery<T> namedQuery = em.createNamedQuery(jpqName, cl);
+            //namedQuery.setParameter("id", id);
+            res = namedQuery.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+    
+    //public List<T> getList(V startIdx, V stopIdx);
+     default public List<T>  getList(int startIdx, int countRec, String jpqName, Class<T> cl)
+    {
+        List<T> res = null;
+        try {
+            EntityManager em = getEM();
+            TypedQuery<T> namedQuery = em.createNamedQuery(jpqName, cl);
+            //namedQuery.setParameter("id", id);            
+            res = namedQuery.setFirstResult(startIdx).setMaxResults(countRec).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
 }
