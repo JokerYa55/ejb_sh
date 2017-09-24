@@ -45,7 +45,7 @@ public class shadulerExec {
     @PersistenceContext(unitName = "elk_sh_jpa")
     protected EntityManager em;
 
-    @Schedule(minute = "*/6", hour = "*")
+    @Schedule(minute = "*/1", hour = "*")
     public void runSh() {
         try {
             //i++;
@@ -56,7 +56,7 @@ public class shadulerExec {
             log.debug("\tStart => " + (new Date()).toString());
 
             Map<String, Object> param = new HashMap<>();
-            param.put("flag", true);
+            param.put("flag", false);
             param.put("send_count", 10);
             List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class, param);
             //List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class);

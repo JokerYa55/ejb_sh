@@ -28,6 +28,7 @@ public interface daoInterface<T, V> {
      * @param Item
      * @return
      */
+    @Transactional 
     default public T addItem(T Item) {
         T res = null;
         try {
@@ -46,6 +47,7 @@ public interface daoInterface<T, V> {
      * @param Item
      * @return
      */
+    @Transactional 
     default public boolean deleteItem(T Item) {
         boolean res = true;
         try {
