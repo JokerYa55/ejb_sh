@@ -6,18 +6,18 @@
 package rtk.eip_sheduler.DAO;
 
 import javax.persistence.EntityManager;
-import rtk.eip_sheduler.beans.TUsersLog;
+import rtk.eip_sheduler.beans.UsersLog;
 import rtk.eip_sheduler.interfaces.daoInterface;
 
 /**
  *
  * @author vasil
  */
-public class logUserDAO implements daoInterface<TUsersLog, Long> {
+public class UsersLogDAO implements daoInterface<UsersLog, Long> {
 
     private EntityManager em;
 
-    public logUserDAO(EntityManager em) {
+    public UsersLogDAO(EntityManager em) {
         this.em = em;
     }
 

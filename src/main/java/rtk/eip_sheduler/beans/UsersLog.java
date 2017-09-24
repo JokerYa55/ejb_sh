@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TUsersLog.findBySendCount", query = "SELECT t FROM TUsersLog t WHERE t.sendCount = :sendCount")
     , @NamedQuery(name = "TUsersLog.findByUserId", query = "SELECT t FROM TUsersLog t WHERE t.userId = :userId")
     , @NamedQuery(name = "TUsersLog.findByUsername", query = "SELECT t FROM TUsersLog t WHERE t.username = :username")})
-public class TUsersLog implements Serializable {
+public class UsersLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -66,14 +66,14 @@ public class TUsersLog implements Serializable {
     @Column(name = "username")
     private String username;
 
-    public TUsersLog() {
+    public UsersLog() {
     }
 
-    public TUsersLog(Long id) {
+    public UsersLog(Long id) {
         this.id = id;
     }
 
-    public TUsersLog(Long id, Date dateOper, boolean flag, int sendCount, long userId, String username) {
+    public UsersLog(Long id, Date dateOper, boolean flag, int sendCount, long userId, String username) {
         this.id = id;
         this.dateOper = dateOper;
         this.flag = flag;
@@ -164,10 +164,10 @@ public class TUsersLog implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TUsersLog)) {
+        if (!(object instanceof UsersLog)) {
             return false;
         }
-        TUsersLog other = (TUsersLog) object;
+        UsersLog other = (UsersLog) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -176,7 +176,9 @@ public class TUsersLog implements Serializable {
 
     @Override
     public String toString() {
-        return "rtk.eip_sheduler.beans.TUsersLog[ id=" + id + " ]";
+        return "TUsersLog{" + "id=" + id + ", dateOper=" + dateOper + ", flag=" + flag + ", info=" + info + ", lastCommand=" + lastCommand + ", operType=" + operType + ", sendCount=" + sendCount + ", userId=" + userId + ", username=" + username + '}';
     }
+
+   
     
 }

@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TUserAttribute.findByName", query = "SELECT t FROM TUserAttribute t WHERE t.name = :name")
     , @NamedQuery(name = "TUserAttribute.findByValue", query = "SELECT t FROM TUserAttribute t WHERE t.value = :value")
     , @NamedQuery(name = "TUserAttribute.findByVisibleFlag", query = "SELECT t FROM TUserAttribute t WHERE t.visibleFlag = :visibleFlag")})
-public class TUserAttribute implements Serializable {
+public class UserAttribute implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,16 +48,16 @@ public class TUserAttribute implements Serializable {
     private boolean visibleFlag;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private TUsers userId;
+    private UserEntity userId;
 
-    public TUserAttribute() {
+    public UserAttribute() {
     }
 
-    public TUserAttribute(Long id) {
+    public UserAttribute(Long id) {
         this.id = id;
     }
 
-    public TUserAttribute(Long id, String name, String value, boolean visibleFlag) {
+    public UserAttribute(Long id, String name, String value, boolean visibleFlag) {
         this.id = id;
         this.name = name;
         this.value = value;
@@ -96,11 +96,11 @@ public class TUserAttribute implements Serializable {
         this.visibleFlag = visibleFlag;
     }
 
-    public TUsers getUserId() {
+    public UserEntity getUserId() {
         return userId;
     }
 
-    public void setUserId(TUsers userId) {
+    public void setUserId(UserEntity userId) {
         this.userId = userId;
     }
 
@@ -114,10 +114,10 @@ public class TUserAttribute implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TUserAttribute)) {
+        if (!(object instanceof UserAttribute)) {
             return false;
         }
-        TUserAttribute other = (TUserAttribute) object;
+        UserAttribute other = (UserAttribute) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TUsers.findByUserRegion", query = "SELECT t FROM TUsers t WHERE t.userRegion = :userRegion")
     , @NamedQuery(name = "TUsers.findByUserStatus", query = "SELECT t FROM TUsers t WHERE t.userStatus = :userStatus")
     , @NamedQuery(name = "TUsers.findByUsername", query = "SELECT t FROM TUsers t WHERE t.username = :username")})
-public class TUsers implements Serializable {
+public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -94,16 +94,16 @@ public class TUsers implements Serializable {
     @Column(name = "username")
     private String username;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<TUserAttribute> tUserAttributeCollection;
+    private Collection<UserAttribute> tUserAttributeCollection;
 
-    public TUsers() {
+    public UserEntity() {
     }
 
-    public TUsers(Long id) {
+    public UserEntity(Long id) {
         this.id = id;
     }
 
-    public TUsers(Long id, Date createDate, boolean enabled, int userStatus, String username) {
+    public UserEntity(Long id, Date createDate, boolean enabled, int userStatus, String username) {
         this.id = id;
         this.createDate = createDate;
         this.enabled = enabled;
@@ -248,11 +248,11 @@ public class TUsers implements Serializable {
     }
 
     @XmlTransient
-    public Collection<TUserAttribute> getTUserAttributeCollection() {
+    public Collection<UserAttribute> getTUserAttributeCollection() {
         return tUserAttributeCollection;
     }
 
-    public void setTUserAttributeCollection(Collection<TUserAttribute> tUserAttributeCollection) {
+    public void setTUserAttributeCollection(Collection<UserAttribute> tUserAttributeCollection) {
         this.tUserAttributeCollection = tUserAttributeCollection;
     }
 
@@ -266,10 +266,10 @@ public class TUsers implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TUsers)) {
+        if (!(object instanceof UserEntity)) {
             return false;
         }
-        TUsers other = (TUsers) object;
+        UserEntity other = (UserEntity) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

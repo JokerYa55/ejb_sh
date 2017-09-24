@@ -6,13 +6,14 @@
 package rtk.eip_sheduler.DAO;
 
 import javax.persistence.EntityManager;
+import rtk.eip_sheduler.beans.UserEntity;
 import rtk.eip_sheduler.interfaces.daoInterface;
 
 /**
  *
  * @author vasil
  */
-public class UserEntityDAO implements daoInterface<UserEntityDAO, Long> {
+public class UserEntityDAO implements daoInterface<UserEntity, Long> {
 
     private EntityManager em;
 
