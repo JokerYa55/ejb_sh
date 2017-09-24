@@ -30,24 +30,24 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "t_users")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TUsers.findAll", query = "SELECT t FROM TUsers t")
-    , @NamedQuery(name = "TUsers.findById", query = "SELECT t FROM TUsers t WHERE t.id = :id")
-    , @NamedQuery(name = "TUsers.findByCreateDate", query = "SELECT t FROM TUsers t WHERE t.createDate = :createDate")
-    , @NamedQuery(name = "TUsers.findByDescription", query = "SELECT t FROM TUsers t WHERE t.description = :description")
-    , @NamedQuery(name = "TUsers.findByEmail", query = "SELECT t FROM TUsers t WHERE t.email = :email")
-    , @NamedQuery(name = "TUsers.findByEnabled", query = "SELECT t FROM TUsers t WHERE t.enabled = :enabled")
-    , @NamedQuery(name = "TUsers.findByFirstname", query = "SELECT t FROM TUsers t WHERE t.firstname = :firstname")
-    , @NamedQuery(name = "TUsers.findByHashType", query = "SELECT t FROM TUsers t WHERE t.hashType = :hashType")
-    , @NamedQuery(name = "TUsers.findByLastname", query = "SELECT t FROM TUsers t WHERE t.lastname = :lastname")
-    , @NamedQuery(name = "TUsers.findByPassword", query = "SELECT t FROM TUsers t WHERE t.password = :password")
-    , @NamedQuery(name = "TUsers.findByPasswordNotHash", query = "SELECT t FROM TUsers t WHERE t.passwordNotHash = :passwordNotHash")
-    , @NamedQuery(name = "TUsers.findByPhone", query = "SELECT t FROM TUsers t WHERE t.phone = :phone")
-    , @NamedQuery(name = "TUsers.findBySalt", query = "SELECT t FROM TUsers t WHERE t.salt = :salt")
-    , @NamedQuery(name = "TUsers.findByThirdname", query = "SELECT t FROM TUsers t WHERE t.thirdname = :thirdname")
-    , @NamedQuery(name = "TUsers.findByUpdateDate", query = "SELECT t FROM TUsers t WHERE t.updateDate = :updateDate")
-    , @NamedQuery(name = "TUsers.findByUserRegion", query = "SELECT t FROM TUsers t WHERE t.userRegion = :userRegion")
-    , @NamedQuery(name = "TUsers.findByUserStatus", query = "SELECT t FROM TUsers t WHERE t.userStatus = :userStatus")
-    , @NamedQuery(name = "TUsers.findByUsername", query = "SELECT t FROM TUsers t WHERE t.username = :username")})
+    @NamedQuery(name = "UserEntity.findAll", query = "SELECT t FROM UserEntity t")
+    , @NamedQuery(name = "UserEntity.findById", query = "SELECT t FROM UserEntity t WHERE t.id = :id")
+    , @NamedQuery(name = "UserEntity.findByCreateDate", query = "SELECT t FROM UserEntity t WHERE t.createDate = :createDate")
+    , @NamedQuery(name = "UserEntity.findByDescription", query = "SELECT t FROM UserEntity t WHERE t.description = :description")
+    , @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT t FROM UserEntity t WHERE t.email = :email")
+    , @NamedQuery(name = "UserEntity.findByEnabled", query = "SELECT t FROM UserEntity t WHERE t.enabled = :enabled")
+    , @NamedQuery(name = "UserEntity.findByFirstname", query = "SELECT t FROM UserEntity t WHERE t.firstname = :firstname")
+    , @NamedQuery(name = "UserEntity.findByHashType", query = "SELECT t FROM UserEntity t WHERE t.hashType = :hashType")
+    , @NamedQuery(name = "UserEntity.findByLastname", query = "SELECT t FROM UserEntity t WHERE t.lastname = :lastname")
+    , @NamedQuery(name = "UserEntity.findByPassword", query = "SELECT t FROM UserEntity t WHERE t.password = :password")
+    , @NamedQuery(name = "UserEntity.findByPasswordNotHash", query = "SELECT t FROM UserEntity t WHERE t.passwordNotHash = :passwordNotHash")
+    , @NamedQuery(name = "UserEntity.findByPhone", query = "SELECT t FROM UserEntity t WHERE t.phone = :phone")
+    , @NamedQuery(name = "UserEntity.findBySalt", query = "SELECT t FROM UserEntity t WHERE t.salt = :salt")
+    , @NamedQuery(name = "UserEntity.findByThirdname", query = "SELECT t FROM UserEntity t WHERE t.thirdname = :thirdname")
+    , @NamedQuery(name = "UserEntity.findByUpdateDate", query = "SELECT t FROM UserEntity t WHERE t.updateDate = :updateDate")
+    , @NamedQuery(name = "UserEntity.findByUserRegion", query = "SELECT t FROM UserEntity t WHERE t.userRegion = :userRegion")
+    , @NamedQuery(name = "UserEntity.findByUserStatus", query = "SELECT t FROM UserEntity t WHERE t.userStatus = :userStatus")
+    , @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT t FROM UserEntity t WHERE t.username = :username")})
 public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -278,7 +278,7 @@ public class UserEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "rtk.eip_sheduler.beans.TUsers[ id=" + id + " ]";
-    }
+        return "UserEntity{" + "id=" + id + ", createDate=" + createDate + ", description=" + description + ", email=" + email + ", enabled=" + enabled + ", firstname=" + firstname + ", hashType=" + hashType + ", lastname=" + lastname + ", password=" + password + ", passwordNotHash=" + passwordNotHash + ", phone=" + phone + ", salt=" + salt + ", thirdname=" + thirdname + ", updateDate=" + updateDate + ", userRegion=" + userRegion + ", userStatus=" + userStatus + ", username=" + username + '}';
+    }   
     
 }

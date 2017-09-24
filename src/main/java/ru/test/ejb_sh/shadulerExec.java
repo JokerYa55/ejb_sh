@@ -37,13 +37,13 @@ public class shadulerExec {
             i++;
             log.info("i = " + i); 
             log.info("em = " + em);
-            List<UsersLog> logList = (new UsersLogDAO(em)).getList("TUsersLog.findAll", UsersLog.class);
+            List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findAll", UsersLog.class);
             
             log.debug("count => " + logList.size());
             
             logList.forEach((t) -> {
                 log.debug("log record => " + t);
-                UserEntity user = (new UserEntityDAO(em)).getItem(t.getUserId(), "userEntity.findById", UserEntity.class);
+                UserEntity user = (new UserEntityDAO(em)).getItem(t.getUserId(), "UserEntity.findById", UserEntity.class);
                 log.debug("user => " + user);
             });
         } catch (Exception e) {

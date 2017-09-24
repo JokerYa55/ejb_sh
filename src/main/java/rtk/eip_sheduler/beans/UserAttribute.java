@@ -25,11 +25,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "t_user_attribute")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TUserAttribute.findAll", query = "SELECT t FROM TUserAttribute t")
-    , @NamedQuery(name = "TUserAttribute.findById", query = "SELECT t FROM TUserAttribute t WHERE t.id = :id")
-    , @NamedQuery(name = "TUserAttribute.findByName", query = "SELECT t FROM TUserAttribute t WHERE t.name = :name")
-    , @NamedQuery(name = "TUserAttribute.findByValue", query = "SELECT t FROM TUserAttribute t WHERE t.value = :value")
-    , @NamedQuery(name = "TUserAttribute.findByVisibleFlag", query = "SELECT t FROM TUserAttribute t WHERE t.visibleFlag = :visibleFlag")})
+    @NamedQuery(name = "UserAttribute.findAll", query = "SELECT t FROM UserAttribute t")
+    , @NamedQuery(name = "UserAttribute.findById", query = "SELECT t FROM UserAttribute t WHERE t.id = :id")
+    , @NamedQuery(name = "UserAttribute.findByName", query = "SELECT t FROM UserAttribute t WHERE t.name = :name")
+    , @NamedQuery(name = "UserAttribute.findByValue", query = "SELECT t FROM UserAttribute t WHERE t.value = :value")
+    , @NamedQuery(name = "UserAttribute.findByVisibleFlag", query = "SELECT t FROM UserAttribute t WHERE t.visibleFlag = :visibleFlag")})
 public class UserAttribute implements Serializable {
 
     private static final long serialVersionUID = 1L;
