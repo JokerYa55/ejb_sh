@@ -18,10 +18,15 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import rtk.eip_sheduler.DAO.UserEntityDAO;
 import rtk.eip_sheduler.DAO.UsersLogDAO;
+import rtk.eip_sheduler.XMLUtil.utlXML;
+import static rtk.eip_sheduler.XMLUtil.utlXML.stringToXml;
 import rtk.eip_sheduler.beans.UserEntity;
 import rtk.eip_sheduler.beans.UsersLog;
+import rtk.eip_sheduler.eipUtil.utlEip;
 
 /**
  *
@@ -42,8 +47,8 @@ public class shadulerExec {
     public void runSh() {
         try {
             //i++;
-            
-            utlEip Eip = new utlEip(new URL(args[0]));
+
+            utlEip Eip = new utlEip(new URL("http://192.168.1.150:8080/elkAdminRest/elkadm/addUser1"));
 
             log.debug("***************************************************************************************");
             log.debug("\tStart => " + (new Date()).toString());
@@ -53,10 +58,80 @@ public class shadulerExec {
             List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class);
 
             log.debug("\tcount => " + logList.size());
-            logList.forEach((t) -> {
-                log.debug("\t\tlog record => " + t);
-                UserEntity user = (new UserEntityDAO(em)).getItem(t.getUserId(), "UserEntity.findById", UserEntity.class);
-                log.debug("\t\t\tuser => " + user);
+
+            logList.forEach((item) -> {
+                try {
+                    log.debug("\t\tlog record => " + item);
+                    UserEntity user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
+                    log.debug("\t\t\tuser => " + user);
+
+                    String res = null;
+                    Document resXml = null;
+                    Element root;
+                    String resultCode;
+
+                    switch (item.getOperType().toUpperCase()) {
+                        case "I":
+                            res = Eip.addUser(user);
+                            item.setLast_command(res);
+                            resXml = stringToXml(res);
+                            log.debug(resXml);
+                            root = resXml.getDocumentElement();
+                            log.debug("resXml = " + utlXML.xmlToString(resXml));
+                            resultCode = root.getAttribute("resultCode");
+                            log.debug("resultCode = " + resultCode);
+                            if (resultCode.equals("0")) {
+                                item.setFlag(true);
+                            } else {
+                                item.setFlag(false);
+                                item.setSend_count(item.getSend_count() + 1);
+                            }
+                            break;
+                        case "U":
+                            // Если поменялся пароль
+//                            Pattern p = Pattern.compile("^(<\\w+>)*$");
+//                            Matcher m = p.matcher(item.getInfo());
+
+                            res = Eip.updateUser(user);
+                            item.setLast_command(res);
+                            resXml = stringToXml(res);
+                            log.debug(resXml);
+                            root = resXml.getDocumentElement();
+                            log.debug("resXml = " + utlXML.xmlToString(resXml));
+                            resultCode = root.getAttribute("resultCode");
+                            log.debug("resultCode = " + resultCode);
+                            if (resultCode.equals("0")) {
+                                item.setFlag(true);
+                            } else {
+                                item.setFlag(false);
+                                item.setSend_count(item.getSend_count() + 1);
+                            }
+
+                            // Обновляем если пароль
+                            if (item.getInfo().contains("<password>")) {
+                                res = Eip.changePassword(user);
+                                item.setLast_command(res);
+                                resXml = stringToXml(res);
+                                log.debug(resXml);
+                                root = resXml.getDocumentElement();
+                                log.debug("resXml = " + utlXML.xmlToString(resXml));
+                                resultCode = root.getAttribute("resultCode");
+                                log.debug("resultCode = " + resultCode);
+                                if (resultCode.equals("0")) {
+                                    item.setFlag(true);
+                                } else {
+                                    item.setFlag(false);
+                                    item.setSend_count(item.getSend_count() + 1);
+                                }
+                            }
+                            break;
+                        case "D":
+                            break;
+                        default: ;
+                    }
+                } catch (Exception ex1) {
+                    log.error(ex1.getMessage());
+                }
             });
         } catch (Exception e) {
             log.info("e = " + e.getMessage());

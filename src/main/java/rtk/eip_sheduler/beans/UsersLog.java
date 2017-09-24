@@ -10,13 +10,15 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -24,47 +26,45 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "t_users_log")
-@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UsersLog.findAll", query = "SELECT t FROM UsersLog t")
-    , @NamedQuery(name = "UsersLog.findById", query = "SELECT t FROM UsersLog t WHERE t.id = :id")
-    , @NamedQuery(name = "UsersLog.findByDateOper", query = "SELECT t FROM UsersLog t WHERE t.dateOper = :dateOper")
-    , @NamedQuery(name = "UsersLog.findByFlag", query = "SELECT t FROM UsersLog t WHERE t.flag = false")
-    , @NamedQuery(name = "UsersLog.findByInfo", query = "SELECT t FROM UsersLog t WHERE t.info = :info")
-    , @NamedQuery(name = "UsersLog.findByLastCommand", query = "SELECT t FROM UsersLog t WHERE t.lastCommand = :lastCommand")
-    , @NamedQuery(name = "UsersLog.findByOperType", query = "SELECT t FROM UsersLog t WHERE t.operType = :operType")
-    , @NamedQuery(name = "UsersLog.findBySendCount", query = "SELECT t FROM UsersLog t WHERE t.sendCount = :sendCount")
-    , @NamedQuery(name = "UsersLog.findByUserId", query = "SELECT t FROM UsersLog t WHERE t.userId = :userId")
-    , @NamedQuery(name = "UsersLog.findByUsername", query = "SELECT t FROM UsersLog t WHERE t.username = :username")})
+    @NamedQuery(name = "UsersLog.findAll", query = "SELECT t FROM UsersLog t where t.flag = false and t.send_count<=:send_count")
+    , @NamedQuery(name = "UsersLog.findById", query = "SELECT t FROM UsersLog t WHERE t.id = :id and t.flag = false and t.send_count<=:send_count")
+    , @NamedQuery(name = "UsersLog.findByFlag", query = "SELECT t FROM UsersLog t WHERE t.flag = false and t.send_count<=10")
+    , @NamedQuery(name = "UsersLog.findByNoSend", query = "SELECT t FROM UsersLog t WHERE t.flag = false and t.send_count<=10")
+    , @NamedQuery(name = "UsersLog.findByOperType", query = "SELECT t FROM UsersLog t WHERE t.operType = :operType and t.flag = false and t.send_count<=:send_count")
+    , @NamedQuery(name = "UsersLog.findByUserId", query = "SELECT t FROM UsersLog t WHERE t.userId = :userId and t.flag = false and t.send_count<=:send_count")
+    , @NamedQuery(name = "UsersLog.findByUsername", query = "SELECT t FROM UsersLog t WHERE t.username = :username and t.flag = false and t.send_count<=:send_count")
+    , @NamedQuery(name = "UsersLog.findByDateOper", query = "SELECT t FROM UsersLog t WHERE t.dateOper = :dateOper and t.flag = false and t.send_count<=:send_count")})
 public class UsersLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "t_users_log_id_seq")
+    @SequenceGenerator(name = "t_users_log_id_seq", sequenceName = "t_users_log_id_seq", allocationSize = 1)
     @Column(name = "id")
     private Long id;
+    @Basic(optional = false)
+    @Column(name = "flag")
+    private boolean flag;
+    @Column(name = "oper_type")
+    private String operType;
+    @Basic(optional = false)
+    @Column(name = "user_id")
+    private Long userId;
+    @Basic(optional = false)
+    @Column(name = "username")
+    private String username;
     @Basic(optional = false)
     @Column(name = "date_oper")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateOper;
-    @Basic(optional = false)
-    @Column(name = "flag")
-    private boolean flag;
-    @Column(name = "info")
+    @Column(name = "send_count", nullable = false, columnDefinition = "integer DEFAULT 0")
+    private Integer send_count;
+    @Column(name = "info", nullable = true, columnDefinition = "text")
     private String info;
-    @Column(name = "last_command")
-    private String lastCommand;
-    @Column(name = "oper_type")
-    private String operType;
-    @Basic(optional = false)
-    @Column(name = "send_count")
-    private int sendCount;
-    @Basic(optional = false)
-    @Column(name = "user_id")
-    private long userId;
-    @Basic(optional = false)
-    @Column(name = "username")
-    private String username;
+    @Column(name = "last_command", nullable = true, columnDefinition = "text")
+    private String last_command;
 
     public UsersLog() {
     }
@@ -73,13 +73,12 @@ public class UsersLog implements Serializable {
         this.id = id;
     }
 
-    public UsersLog(Long id, Date dateOper, boolean flag, int sendCount, long userId, String username) {
+    public UsersLog(Long id, boolean flag, Long userId, String username, Date dateOper) {
         this.id = id;
-        this.dateOper = dateOper;
         this.flag = flag;
-        this.sendCount = sendCount;
         this.userId = userId;
         this.username = username;
+        this.dateOper = dateOper;
     }
 
     public Long getId() {
@@ -90,36 +89,12 @@ public class UsersLog implements Serializable {
         this.id = id;
     }
 
-    public Date getDateOper() {
-        return dateOper;
-    }
-
-    public void setDateOper(Date dateOper) {
-        this.dateOper = dateOper;
-    }
-
     public boolean getFlag() {
         return flag;
     }
 
     public void setFlag(boolean flag) {
         this.flag = flag;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    public String getLastCommand() {
-        return lastCommand;
-    }
-
-    public void setLastCommand(String lastCommand) {
-        this.lastCommand = lastCommand;
     }
 
     public String getOperType() {
@@ -130,19 +105,11 @@ public class UsersLog implements Serializable {
         this.operType = operType;
     }
 
-    public int getSendCount() {
-        return sendCount;
-    }
-
-    public void setSendCount(int sendCount) {
-        this.sendCount = sendCount;
-    }
-
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -152,6 +119,14 @@ public class UsersLog implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Date getDateOper() {
+        return dateOper;
+    }
+
+    public void setDateOper(Date dateOper) {
+        this.dateOper = dateOper;
     }
 
     @Override
@@ -174,11 +149,33 @@ public class UsersLog implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "TUsersLog{" + "id=" + id + ", dateOper=" + dateOper + ", flag=" + flag + ", info=" + info + ", lastCommand=" + lastCommand + ", operType=" + operType + ", sendCount=" + sendCount + ", userId=" + userId + ", username=" + username + '}';
+    public Integer getSend_count() {
+        return send_count;
     }
 
-   
-    
+    public void setSend_count(Integer send_count) {
+        this.send_count = send_count;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getLast_command() {
+        return last_command;
+    }
+
+    public void setLast_command(String last_command) {
+        this.last_command = last_command;
+    }
+
+    @Override
+    public String toString() {
+        return "TUsersLog{" + "id=" + id + ", flag=" + flag + ", operType=" + operType + ", userId=" + userId + ", username=" + username + ", dateOper=" + dateOper + ", send_count=" + send_count + ", info=" + info + ", last_command=" + last_command + '}';
+    }
+
 }
