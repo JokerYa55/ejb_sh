@@ -26,4 +26,6 @@ public class UserEntityDAO implements daoInterface<UserEntity, Long> {
         return this.em;
     }
 
+    
+    
 }

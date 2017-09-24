@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.ejb.Local;
 import org.jboss.logging.Logger;
@@ -43,7 +45,7 @@ public class shadulerExec {
     @PersistenceContext(unitName = "elk_sh_jpa")
     protected EntityManager em;
 
-    @Schedule(minute = "*/1", hour = "*")
+    @Schedule(minute = "*/6", hour = "*")
     public void runSh() {
         try {
             //i++;
@@ -53,13 +55,15 @@ public class shadulerExec {
             log.debug("***************************************************************************************");
             log.debug("\tStart => " + (new Date()).toString());
 
-            //log.info("i = " + i);
-            //log.info("em = " + em);
-            List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class);
+            Map<String, Object> param = new HashMap<>();
+            param.put("flag", true);
+            param.put("send_count", 10);
+            List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class, param);
+            //List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class);
 
             log.debug("\tcount => " + logList.size());
 
-            logList.forEach((item) -> {
+            for (UsersLog item : logList) {
                 try {
                     log.debug("\t\tlog record => " + item);
                     UserEntity user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
@@ -132,7 +136,11 @@ public class shadulerExec {
                 } catch (Exception ex1) {
                     log.error(ex1.getMessage());
                 }
-            });
+                
+                log.debug("item => " + item);                
+                //em.merge(item);
+                (new UsersLogDAO(em)).updateItem(item);
+            }
         } catch (Exception e) {
             log.info("e = " + e.getMessage());
         }

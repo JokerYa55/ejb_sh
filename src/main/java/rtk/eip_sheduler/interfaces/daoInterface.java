@@ -6,8 +6,10 @@
 package rtk.eip_sheduler.interfaces;
 
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -21,7 +23,6 @@ public interface daoInterface<T, V> {
      */
     public EntityManager getEM();
 
-
     /**
      *
      * @param Item
@@ -31,9 +32,9 @@ public interface daoInterface<T, V> {
         T res = null;
         try {
             EntityManager em = getEM();
-            em.getTransaction().begin();
+            //em.getTransaction().begin();
             em.merge(Item);
-            em.getTransaction().commit();
+            //em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,9 +50,9 @@ public interface daoInterface<T, V> {
         boolean res = true;
         try {
             EntityManager em = getEM();
-            em.getTransaction().begin();
+            //em.getTransaction().begin();
             em.detach(Item);
-            em.getTransaction().commit();
+            //em.getTransaction().commit();
         } catch (Exception e) {
             res = false;
             e.printStackTrace();
@@ -64,13 +65,17 @@ public interface daoInterface<T, V> {
      * @param Item
      * @return
      */
+    @Transactional 
     default public boolean updateItem(T Item) {
-        boolean res = true;
+        System.out.println("updateItem => " + Item);
+        boolean res = false;
         try {
             EntityManager em = getEM();
-            em.getTransaction().begin();
+            System.out.println("em = " + em);
+            //em.getTransaction().begin();
             em.merge(Item);
-            em.getTransaction().commit();
+            res = true;
+            //em.getTransaction().commit();
         } catch (Exception e) {
             res = false;
             e.printStackTrace();
@@ -78,29 +83,14 @@ public interface daoInterface<T, V> {
         return res;
     }
 
-    default public List<T> test(long id, Class<T> cl)
-    {
-        T res = null;
-        try {
-            EntityManager em = getEM();
-            TypedQuery<T> namedQuery = em.createNamedQuery("TUsers.findById", cl);
-            namedQuery.setParameter("id", id);
-            res = namedQuery.getSingleResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
     /**
-     * 
+     *
      * @param id
      * @param jpqName
      * @param cl
-     * @return 
+     * @return
      */
-    default public T  getItem(long id, String jpqName, Class<T> cl)
-    {
+    default public T getItem(long id, String jpqName, Class<T> cl) {
         T res = null;
         try {
             EntityManager em = getEM();
@@ -112,15 +102,14 @@ public interface daoInterface<T, V> {
         }
         return res;
     }
-    
+
     /**
-     * 
+     *
      * @param jpqName
      * @param cl
-     * @return 
+     * @return
      */
-    default public List<T>  getList(String jpqName, Class<T> cl)
-    {
+    default public List<T> getList(String jpqName, Class<T> cl) {
         System.out.println("getList => " + jpqName + " cl = " + cl.getName());
         List<T> res = null;
         try {
@@ -134,10 +123,36 @@ public interface daoInterface<T, V> {
         System.out.println("res => " + res.size());
         return res;
     }
-    
-    //public List<T> getList(V startIdx, V stopIdx);
-     default public List<T>  getList(int startIdx, int countRec, String jpqName, Class<T> cl)
-    {
+
+    default public List<T> getList(String jpqName, Class<T> cl, Map<String, Object> params) {
+        System.out.println("getList => " + jpqName + " cl = " + cl.getName());
+        List<T> res = null;
+        try {
+            EntityManager em = getEM();
+            TypedQuery<T> namedQuery = em.createNamedQuery(jpqName, cl);
+            if (params != null) {
+                params.forEach((key, val) -> {
+                    namedQuery.setParameter(key, val);
+                });
+            }
+            //namedQuery.setParameter("id", id);
+            res = namedQuery.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("res => " + res.size());
+        return res;
+    }
+
+    /**
+     *
+     * @param startIdx
+     * @param countRec
+     * @param jpqName
+     * @param cl
+     * @return
+     */
+    default public List<T> getList(int startIdx, int countRec, String jpqName, Class<T> cl) {
         List<T> res = null;
         try {
             EntityManager em = getEM();
