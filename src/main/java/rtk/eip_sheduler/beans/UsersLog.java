@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "UsersLog.findAll", query = "SELECT t FROM UsersLog t")
     , @NamedQuery(name = "UsersLog.findById", query = "SELECT t FROM UsersLog t WHERE t.id = :id")
     , @NamedQuery(name = "UsersLog.findByDateOper", query = "SELECT t FROM UsersLog t WHERE t.dateOper = :dateOper")
-    , @NamedQuery(name = "UsersLog.findByFlag", query = "SELECT t FROM UsersLog t WHERE t.flag = :flag")
+    , @NamedQuery(name = "UsersLog.findByFlag", query = "SELECT t FROM UsersLog t WHERE t.flag = false")
     , @NamedQuery(name = "UsersLog.findByInfo", query = "SELECT t FROM UsersLog t WHERE t.info = :info")
     , @NamedQuery(name = "UsersLog.findByLastCommand", query = "SELECT t FROM UsersLog t WHERE t.lastCommand = :lastCommand")
     , @NamedQuery(name = "UsersLog.findByOperType", query = "SELECT t FROM UsersLog t WHERE t.operType = :operType")

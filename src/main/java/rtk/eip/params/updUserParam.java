@@ -14,10 +14,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author vasil
  */
 @XmlRootElement(name = "request")
-public class addUserParam {
+public class updUserParam {
 
     private String user;
-    private int autoCreateFlag;
     private String surname;
     private String name;
     private String patronymic;
@@ -28,11 +27,24 @@ public class addUserParam {
     private String contactPhone;
     private String password;
     private String reqType;
-    private String hash;
-    private String hash_type;
-    private String salt;
+    private String userStatus;
 
-    public addUserParam() {
+    @XmlAttribute
+    public String getReqType() {
+        return reqType;
+    }
+
+    public void setReqType(String reqType) {
+        this.reqType = reqType;
+    }
+
+    @XmlAttribute
+    public String getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(String userStatus) {
+        this.userStatus = userStatus;
     }
 
     @XmlAttribute
@@ -42,15 +54,6 @@ public class addUserParam {
 
     public void setUser(String user) {
         this.user = user;
-    }
-
-    @XmlAttribute
-    public int getAutoCreateFlag() {
-        return autoCreateFlag;
-    }
-
-    public void setAutoCreateFlag(int autoCreateFlag) {
-        this.autoCreateFlag = autoCreateFlag;
     }
 
     @XmlAttribute
@@ -136,42 +139,7 @@ public class addUserParam {
 
     @Override
     public String toString() {
-        return "addUserParam{" + "user=" + user + ", autoCreateFlag=" + autoCreateFlag + ", surname=" + surname + ", name=" + name + ", patronymic=" + patronymic + ", dob=" + dob + ", gender=" + gender + ", region=" + region + ", contactEmail=" + contactEmail + ", contactPhone=" + contactPhone + ", password=" + password + '}';
+        return "updUserParam{" + "user=" + user + ", surname=" + surname + ", name=" + name + ", patronymic=" + patronymic + ", dob=" + dob + ", gender=" + gender + ", region=" + region + ", contactEmail=" + contactEmail + ", contactPhone=" + contactPhone + ", password=" + password + ", reqType=" + reqType + ", userStatus=" + userStatus + '}';
     }
 
-    @XmlAttribute
-    public String getReqType() {
-        return reqType;
-    }
-
-    public void setReqType(String reqType) {
-        this.reqType = reqType;
-    }
-
-    @XmlAttribute
-    public String getHash() {
-        return hash;
-    }
-
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
-
-    @XmlAttribute
-    public String getHash_type() {
-        return hash_type;
-    }
-
-    public void setHash_type(String hash_type) {
-        this.hash_type = hash_type;
-    }
-
-    @XmlAttribute
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
 }

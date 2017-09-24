@@ -6,62 +6,62 @@
 package rtk.eip_sheduler.beans;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author vasil
  */
-@Entity
-@Table(name = "t_user_attribute")
-@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UserAttribute.findAll", query = "SELECT t FROM UserAttribute t")
-    , @NamedQuery(name = "UserAttribute.findById", query = "SELECT t FROM UserAttribute t WHERE t.id = :id")
-    , @NamedQuery(name = "UserAttribute.findByName", query = "SELECT t FROM UserAttribute t WHERE t.name = :name")
-    , @NamedQuery(name = "UserAttribute.findByValue", query = "SELECT t FROM UserAttribute t WHERE t.value = :value")
-    , @NamedQuery(name = "UserAttribute.findByVisibleFlag", query = "SELECT t FROM UserAttribute t WHERE t.visibleFlag = :visibleFlag")})
+    @NamedQuery(name = "getAttributeByName", query = "select u from UserAttribute u where u.name = :name")
+    ,
+    @NamedQuery(name = "getAttributeById", query = "select u from UserAttribute u where u.id = :id")
+    ,    
+    @NamedQuery(name = "getAllAttributesByUsers", query = "select u from UserAttribute u where u.userId=:userId")
+    ,
+    @NamedQuery(name = "findAttributeByUserName", query = "select u from UserAttribute u where u.userId = :userId and u.name = :name"),})
+
+@Entity
+@Table(name = "t_user_attribute", indexes = {
+    @Index(name = "t_user_attribute_name_idx", columnList = "name")
+    ,
+    @Index(name = "t_user_attribut_user_id_idx", columnList = "user_id")})
 public class UserAttribute implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "t_user_attribute_id_seq")
+    @SequenceGenerator(name = "t_user_attribute_id_seq", sequenceName = "t_user_attribute_id_seq", allocationSize = 1)
     private Long id;
-    @Basic(optional = false)
-    @Column(name = "name")
+    @Column(name = "name", unique = false, nullable = false)
     private String name;
-    @Basic(optional = false)
-    @Column(name = "value")
+    @Column(name = "value", unique = false, nullable = false)
     private String value;
-    @Basic(optional = false)
-    @Column(name = "visible_flag")
-    private boolean visibleFlag;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private UserEntity userId;
+    @Column(name = "visible_flag", unique = false, nullable = false, columnDefinition = "boolean DEFAULT true")
+    private boolean visible_flag;
 
     public UserAttribute() {
     }
 
-    public UserAttribute(Long id) {
-        this.id = id;
-    }
-
-    public UserAttribute(Long id, String name, String value, boolean visibleFlag) {
-        this.id = id;
+    public UserAttribute(String name, String value, UserEntity userId, boolean visible_flag) {
         this.name = name;
         this.value = value;
-        this.visibleFlag = visibleFlag;
+        this.userId = userId;
+        this.visible_flag = visible_flag;
     }
 
     public Long getId() {
@@ -88,14 +88,6 @@ public class UserAttribute implements Serializable {
         this.value = value;
     }
 
-    public boolean getVisibleFlag() {
-        return visibleFlag;
-    }
-
-    public void setVisibleFlag(boolean visibleFlag) {
-        this.visibleFlag = visibleFlag;
-    }
-
     public UserEntity getUserId() {
         return userId;
     }
@@ -104,29 +96,17 @@ public class UserAttribute implements Serializable {
         this.userId = userId;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+    public boolean isVisible_flag() {
+        return visible_flag;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UserAttribute)) {
-            return false;
-        }
-        UserAttribute other = (UserAttribute) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public void setVisible_flag(boolean visible_flag) {
+        this.visible_flag = visible_flag;
     }
 
     @Override
     public String toString() {
-        return "rtk.eip_sheduler.beans.TUserAttribute[ id=" + id + " ]";
+        return "UserAttribute{" + "id=" + id + ", name=" + name + ", value=" + value + '}';
     }
-    
+
 }

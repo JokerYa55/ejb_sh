@@ -8,93 +8,127 @@ package rtk.eip_sheduler.beans;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author vasil
  */
-@Entity
-@Table(name = "t_users")
-@XmlRootElement
+//@Entity
+//@Table(name = "t_users")
+//@XmlRootElement
+//@NamedQueries({
+//    @NamedQuery(name = "UserEntity.findAll", query = "SELECT t FROM UserEntity t")
+//    , @NamedQuery(name = "UserEntity.findById", query = "SELECT t FROM UserEntity t WHERE t.id = :id")
+//    , @NamedQuery(name = "UserEntity.findByCreateDate", query = "SELECT t FROM UserEntity t WHERE t.createDate = :createDate")
+//    , @NamedQuery(name = "UserEntity.findByDescription", query = "SELECT t FROM UserEntity t WHERE t.description = :description")
+//    , @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT t FROM UserEntity t WHERE t.email = :email")
+//    , @NamedQuery(name = "UserEntity.findByEnabled", query = "SELECT t FROM UserEntity t WHERE t.enabled = :enabled")
+//    , @NamedQuery(name = "UserEntity.findByFirstname", query = "SELECT t FROM UserEntity t WHERE t.firstname = :firstname")
+//    , @NamedQuery(name = "UserEntity.findByHashType", query = "SELECT t FROM UserEntity t WHERE t.hashType = :hashType")
+//    , @NamedQuery(name = "UserEntity.findByLastname", query = "SELECT t FROM UserEntity t WHERE t.lastname = :lastname")
+//    , @NamedQuery(name = "UserEntity.findByPassword", query = "SELECT t FROM UserEntity t WHERE t.password = :password")
+//    , @NamedQuery(name = "UserEntity.findByPasswordNotHash", query = "SELECT t FROM UserEntity t WHERE t.passwordNotHash = :passwordNotHash")
+//    , @NamedQuery(name = "UserEntity.findByPhone", query = "SELECT t FROM UserEntity t WHERE t.phone = :phone")
+//    , @NamedQuery(name = "UserEntity.findBySalt", query = "SELECT t FROM UserEntity t WHERE t.salt = :salt")
+//    , @NamedQuery(name = "UserEntity.findByThirdname", query = "SELECT t FROM UserEntity t WHERE t.thirdname = :thirdname")
+//    , @NamedQuery(name = "UserEntity.findByUpdateDate", query = "SELECT t FROM UserEntity t WHERE t.updateDate = :updateDate")
+//    , @NamedQuery(name = "UserEntity.findByUserRegion", query = "SELECT t FROM UserEntity t WHERE t.userRegion = :userRegion")
+//    , @NamedQuery(name = "UserEntity.findByUserStatus", query = "SELECT t FROM UserEntity t WHERE t.userStatus = :userStatus")
+//    , @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT t FROM UserEntity t WHERE t.username = :username")})
 @NamedQueries({
-    @NamedQuery(name = "UserEntity.findAll", query = "SELECT t FROM UserEntity t")
-    , @NamedQuery(name = "UserEntity.findById", query = "SELECT t FROM UserEntity t WHERE t.id = :id")
-    , @NamedQuery(name = "UserEntity.findByCreateDate", query = "SELECT t FROM UserEntity t WHERE t.createDate = :createDate")
-    , @NamedQuery(name = "UserEntity.findByDescription", query = "SELECT t FROM UserEntity t WHERE t.description = :description")
-    , @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT t FROM UserEntity t WHERE t.email = :email")
-    , @NamedQuery(name = "UserEntity.findByEnabled", query = "SELECT t FROM UserEntity t WHERE t.enabled = :enabled")
-    , @NamedQuery(name = "UserEntity.findByFirstname", query = "SELECT t FROM UserEntity t WHERE t.firstname = :firstname")
-    , @NamedQuery(name = "UserEntity.findByHashType", query = "SELECT t FROM UserEntity t WHERE t.hashType = :hashType")
-    , @NamedQuery(name = "UserEntity.findByLastname", query = "SELECT t FROM UserEntity t WHERE t.lastname = :lastname")
-    , @NamedQuery(name = "UserEntity.findByPassword", query = "SELECT t FROM UserEntity t WHERE t.password = :password")
-    , @NamedQuery(name = "UserEntity.findByPasswordNotHash", query = "SELECT t FROM UserEntity t WHERE t.passwordNotHash = :passwordNotHash")
-    , @NamedQuery(name = "UserEntity.findByPhone", query = "SELECT t FROM UserEntity t WHERE t.phone = :phone")
-    , @NamedQuery(name = "UserEntity.findBySalt", query = "SELECT t FROM UserEntity t WHERE t.salt = :salt")
-    , @NamedQuery(name = "UserEntity.findByThirdname", query = "SELECT t FROM UserEntity t WHERE t.thirdname = :thirdname")
-    , @NamedQuery(name = "UserEntity.findByUpdateDate", query = "SELECT t FROM UserEntity t WHERE t.updateDate = :updateDate")
-    , @NamedQuery(name = "UserEntity.findByUserRegion", query = "SELECT t FROM UserEntity t WHERE t.userRegion = :userRegion")
-    , @NamedQuery(name = "UserEntity.findByUserStatus", query = "SELECT t FROM UserEntity t WHERE t.userStatus = :userStatus")
-    , @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT t FROM UserEntity t WHERE t.username = :username")})
+    @NamedQuery(name = "userEntity.findAll", query = "SELECT t FROM UserEntity t where t.user_status = 0")
+    , @NamedQuery(name = "userEntity.findById", query = "SELECT t FROM UserEntity t WHERE t.id = :id")
+    //, @NamedQuery(name = "UserEntity.findByAddress", query = "SELECT t FROM UserEntity t WHERE t.address = :address and t.user_status = 0")
+    , @NamedQuery(name = "userEntity.findByEmail", query = "SELECT t FROM UserEntity t WHERE t.email = :email and t.user_status = 0")
+    , @NamedQuery(name = "userEntity.findByHashType", query = "SELECT t FROM UserEntity t WHERE t.hesh_type = :hashType and t.user_status = 0")
+    , @NamedQuery(name = "userEntity.findByPassword", query = "SELECT t FROM UserEntity t WHERE t.password = :password and t.user_status = 0")
+    //, @NamedQuery(name = "UserEntity.findByPasswordNotHash", query = "SELECT t FROM UserEntity t WHERE t.password_not_hash = :passwordNotHash and t.user_status = 0")
+    , @NamedQuery(name = "userEntity.findByPhone", query = "SELECT t FROM UserEntity t WHERE t.phone = :phone and t.user_status = 0")
+    , @NamedQuery(name = "userEntity.findByUsername", query = "SELECT t FROM UserEntity t WHERE t.username = :username and t.user_status = 0")
+    , @NamedQuery(name = "userEntity.findBySalt", query = "SELECT t FROM UserEntity t WHERE t.salt = :salt and t.user_status = 0")})
+
+@Entity
+@Table(name = "t_users", indexes = {
+    @Index(name = "t_users_status_idx", columnList = "user_status")
+    ,
+    @Index(name = "t_users_username_idx", columnList = "username")})
 public class UserEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final Logger log = Logger.getLogger(UserEntity.class);
+
     @Id
-    @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "t_users_id_seq")
+    @SequenceGenerator(name = "t_users_id_seq", sequenceName = "t_users_id_seq", allocationSize = 1)
     private Long id;
-    @Basic(optional = false)
-    @Column(name = "create_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
-    @Column(name = "description")
-    private String description;
-    @Column(name = "email")
-    private String email;
-    @Basic(optional = false)
-    @Column(name = "enabled")
-    private boolean enabled;
-    @Column(name = "firstname")
-    private String firstname;
-    @Column(name = "hash_type")
-    private String hashType;
-    @Column(name = "lastname")
-    private String lastname;
-    @Column(name = "password")
-    private String password;
-    @Column(name = "password_not_hash")
-    private String passwordNotHash;
-    @Column(name = "phone")
-    private String phone;
-    @Column(name = "salt")
-    private String salt;
-    @Column(name = "thirdname")
-    private String thirdname;
-    @Column(name = "update_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateDate;
-    @Column(name = "user_region")
-    private Integer userRegion;
-    @Basic(optional = false)
-    @Column(name = "user_status")
-    private int userStatus;
-    @Basic(optional = false)
-    @Column(name = "username")
+    // Логин
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<UserAttribute> tUserAttributeCollection;
+    // Фамилия    
+    @Column(name = "firstName", unique = false, nullable = true)
+    private String firstName;
+    // Имя
+    @Column(name = "lastName", unique = false, nullable = true)
+    private String lastName;
+    // Отчество
+    @Column(name = "thirdName", unique = false, nullable = true)
+    private String thirdName;
+    // e-mail
+    @Column(name = "email", unique = true, nullable = true)
+    private String email;
+    // Пароль
+    @Column(name = "password", nullable = true)
+    private String password;
+    // Незашифрованный пароль
+//    @Column(name = "password_not_hash", nullable = true)
+//    private String password_not_hash;
+    // Телефон
+    @Column(name = "phone", nullable = true)
+    private String phone;
+    @Column(name = "hash_type", nullable = true)
+    private String hesh_type;
+    @Column(name = "salt", nullable = true)
+    private String salt;
+    @Column(name = "user_status", unique = false, nullable = false, columnDefinition = "integer DEFAULT 0")
+    private Integer user_status;
+    @Column(name = "create_date", unique = false, nullable = false, columnDefinition = "timestamp DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date create_date;
+    @Column(name = "update_date", unique = false, nullable = true, columnDefinition = "timestamp")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date update_date;
+    @Column(name = "user_region", unique = false, nullable = true)
+    private Integer user_region;
+    @Column(name = "enabled", unique = false, nullable = false, columnDefinition = "boolean DEFAULT true")
+    private boolean enabled;
+//    @Column(name = "email_verified", unique = false, nullable = false, columnDefinition = "boolean DEFAULT false")
+//    private boolean email_verified;
+    @Column(name = "description", unique = false, nullable = true)
+    private String description;
+//    @Column(name = "federation_link", unique = false, nullable = true)
+//    private String federation_link;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", orphanRemoval = true)
+    private Collection<UserAttribute> userAttributeCollection;
 
     public UserEntity() {
     }
@@ -103,28 +137,160 @@ public class UserEntity implements Serializable {
         this.id = id;
     }
 
-    public UserEntity(Long id, Date createDate, boolean enabled, int userStatus, String username) {
-        this.id = id;
-        this.createDate = createDate;
-        this.enabled = enabled;
-        this.userStatus = userStatus;
-        this.username = username;
-    }
-
+    /**
+     *
+     * @return
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    /**
+     *
+     * @return
+     */
+    public String getUsername() {
+        return username;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    /**
+     *
+     * @param username
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     *
+     * @param email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     *
+     * @param password
+     */
+    public void setPassword(String password) {
+        log.debug("setPassword => " + password);
+        this.password = password;
+        //this.hash = keycloak.storage.util.hashUtil.sha1(this.password);
+        //this.hesh_type = keycloak.storage.util.hashUtil.md5(this.password); 
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     *
+     * @param phone
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     *
+     * @param hash
+     */
+    public void setHash(String hash) {
+        //this.hash = keycloak.storage.util.hashUtil.sha1(this.password);
+        this.password = hash;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getHesh_type() {
+        return hesh_type;
+    }
+
+    /**
+     *
+     * @param hesh_type
+     */
+    public void setHesh_type(String hesh_type) {
+        this.hesh_type = hesh_type;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getSalt() {
+        return salt;
+    }
+
+    /**
+     *
+     * @param salt
+     */
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public Integer getUser_status() {
+        return user_status;
+    }
+
+    public void setUser_status(Integer user_status) {
+        this.user_status = user_status;
+    }
+
+    public Date getCreate_date() {
+        return create_date;
+    }
+
+    public void setCreate_date(Date create_date) {
+        this.create_date = create_date;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Integer getUser_region() {
+        return user_region;
+    }
+
+    public void setUser_region(Integer user_region) {
+        this.user_region = user_region;
     }
 
     public String getDescription() {
@@ -135,150 +301,87 @@ public class UserEntity implements Serializable {
         this.description = description;
     }
 
-    public String getEmail() {
-        return email;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public boolean getEnabled() {
-        return enabled;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public Date getUpdate_date() {
+        return update_date;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setUpdate_date(Date update_date) {
+        this.update_date = update_date;
     }
 
-    public String getHashType() {
-        return hashType;
+    public String getThirdName() {
+        return thirdName;
     }
 
-    public void setHashType(String hashType) {
-        this.hashType = hashType;
+    public void setThirdName(String thirdName) {
+        this.thirdName = thirdName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public Collection<UserAttribute> getUserAttributeCollection() {
+        return userAttributeCollection;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setUserAttributeCollection(Collection<UserAttribute> userAttributeCollection) {
+        this.userAttributeCollection = userAttributeCollection;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPasswordNotHash() {
-        return passwordNotHash;
-    }
-
-    public void setPasswordNotHash(String passwordNotHash) {
-        this.passwordNotHash = passwordNotHash;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public String getThirdname() {
-        return thirdname;
-    }
-
-    public void setThirdname(String thirdname) {
-        this.thirdname = thirdname;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public Integer getUserRegion() {
-        return userRegion;
-    }
-
-    public void setUserRegion(Integer userRegion) {
-        this.userRegion = userRegion;
-    }
-
-    public int getUserStatus() {
-        return userStatus;
-    }
-
-    public void setUserStatus(int userStatus) {
-        this.userStatus = userStatus;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @XmlTransient
-    public Collection<UserAttribute> getTUserAttributeCollection() {
-        return tUserAttributeCollection;
-    }
-
-    public void setTUserAttributeCollection(Collection<UserAttribute> tUserAttributeCollection) {
-        this.tUserAttributeCollection = tUserAttributeCollection;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UserEntity)) {
-            return false;
+    public void addUserAttribute(UserAttribute attr) {
+        log.info("addUserAttribute => " + attr);
+        log.info("addUserAttribute => " + this);
+        // Проверяем есть ли такой аттрибут в БД
+        boolean flag = false;
+        if (this.userAttributeCollection != null) {
+            for (UserAttribute t : this.userAttributeCollection) {
+                if (t.getName().equals(attr.getName())) {
+                    t.setValue(attr.getValue());
+                    flag = true;
+                }
+            }
+        } else {
+            this.userAttributeCollection = new LinkedList<>();
         }
-        UserEntity other = (UserEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
+        UserAttribute attrTemp = attr;
+        log.info("this.userAttributeCollection => " + this.userAttributeCollection);
+        if (flag == false) {
+            if (attrTemp.getId() == null) {
+                attrTemp = new UserAttribute(attr.getName(), attr.getValue(), this, true);
+            }
+            this.getUserAttributeCollection().add(attrTemp);
         }
-        return true;
+    }
+
+    public void deleteAttribute(String attrName) {
+        /*log.info("deleteAttribute => " + attrName);
+        Object temp = null;
+        for (UserAttribute t : this.userAttributeCollection) {
+            log.info("t => " + t);
+            if (t.getName().equals(attrName)) {
+                temp = t;
+            }
+        }
+        log.info("temp = " + temp);
+        if (temp != null)this.userAttributeCollection.remove(temp);     */
+
     }
 
     @Override
     public String toString() {
-        return "UserEntity{" + "id=" + id + ", createDate=" + createDate + ", description=" + description + ", email=" + email + ", enabled=" + enabled + ", firstname=" + firstname + ", hashType=" + hashType + ", lastname=" + lastname + ", password=" + password + ", passwordNotHash=" + passwordNotHash + ", phone=" + phone + ", salt=" + salt + ", thirdname=" + thirdname + ", updateDate=" + updateDate + ", userRegion=" + userRegion + ", userStatus=" + userStatus + ", username=" + username + '}';
-    }   
-    
+        return "UserEntity{" + "id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", thirdName=" + thirdName + ", email=" + email + '}';
+    }
 }
