@@ -100,7 +100,7 @@ public class utlEip {
             if (user.getUser_region() != null) {
                 param.setRegion(user.getUser_region().toString());
             }
-            if (user.getUser_status() != null) {
+            if ((user.getUser_status() != null) && (user.getUser_status() != 0)) {
                 param.setUserStatus(user.getUser_status().toString());
             }
 
