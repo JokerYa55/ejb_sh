@@ -44,7 +44,7 @@ public class utlEip {
             param.setReqType("CREATE_USER_PASSWORD");
             param.setSalt(user.getSalt());
             param.setHash(user.getPassword());
-            param.setHash_type(user.getHesh_type());
+            param.setHash_type(user.getHesh_type().toUpperCase());
             param.setUser(user.getUsername());
             param.setSurname(user.getFirstName());
             param.setName(user.getLastName());

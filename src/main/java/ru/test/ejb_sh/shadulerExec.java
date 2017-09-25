@@ -50,7 +50,7 @@ public class shadulerExec {
         try {
             //i++;
 
-            utlEip Eip = new utlEip(new URL("http://192.168.1.150:8080/elkAdminRest/elkadm/addUser1"));
+            utlEip Eip = new utlEip(new URL("http://10.31.70.120/elkProxy"));
 
             log.debug("***************************************************************************************");
             log.debug("\tStart => " + (new Date()).toString());
