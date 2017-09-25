@@ -73,16 +73,19 @@ public class shadulerExec {
                     Document resXml = null;
                     Element root;
                     String resultCode;
+                    String lastCommand;
 
                     switch (item.getOperType().toUpperCase()) {
                         case "I":
                             res = Eip.addUser(user);
-                            item.setLast_command(res);
+                            item.setLast_res(res);
                             resXml = stringToXml(res);
                             log.debug(resXml);
                             root = resXml.getDocumentElement();
                             log.debug("resXml = " + utlXML.xmlToString(resXml));
                             resultCode = root.getAttribute("resultCode");
+                            lastCommand = root.getAttribute("lastCommand");
+                            item.setLast_command(lastCommand);
                             log.debug("resultCode = " + resultCode);
                             if (resultCode.equals("0")) {
                                 item.setFlag(true);
@@ -103,7 +106,7 @@ public class shadulerExec {
                             root = resXml.getDocumentElement();
                             log.debug("resXml = " + utlXML.xmlToString(resXml));
                             resultCode = root.getAttribute("resultCode");
-                            String lastCommand = root.getAttribute("lastCommand");                            
+                            lastCommand = root.getAttribute("lastCommand");
                             item.setLast_command(lastCommand);
                             log.debug("resultCode = " + resultCode);
                             if (resultCode.equals("0")) {
@@ -116,12 +119,14 @@ public class shadulerExec {
                             // Обновляем если пароль
                             if (item.getInfo().contains("<password>")) {
                                 res = Eip.changePassword(user);
-                                item.setLast_command(res);
+                                item.setLast_res(res);
                                 resXml = stringToXml(res);
                                 log.debug(resXml);
                                 root = resXml.getDocumentElement();
                                 log.debug("resXml = " + utlXML.xmlToString(resXml));
                                 resultCode = root.getAttribute("resultCode");
+                                lastCommand = root.getAttribute("lastCommand");
+                                item.setLast_command(lastCommand);
                                 log.debug("resultCode = " + resultCode);
                                 if (resultCode.equals("0")) {
                                     item.setFlag(true);
@@ -138,8 +143,8 @@ public class shadulerExec {
                 } catch (Exception ex1) {
                     log.error(ex1.getMessage());
                 }
-                
-                log.debug("item => " + item);                
+
+                log.debug("item => " + item);
                 //em.merge(item);
                 (new UsersLogDAO(em)).updateItem(item);
             }
