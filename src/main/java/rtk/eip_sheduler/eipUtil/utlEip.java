@@ -59,10 +59,14 @@ public class utlEip {
             String dataXml = utlxml.convertObjectToXml(param);
             log.debug("dataXml => " + dataXml);
             res = http.doPost(url.toString(), dataXml, null);
-
+            
+            StringBuffer resBuf = new StringBuffer(res);
+            resBuf.insert(resBuf.lastIndexOf("/"), " lastCommand=\"" + dataXml + "\"");            
+            res = resBuf.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        log.debug("res = " + res);
         return res;
     }
 
@@ -109,10 +113,19 @@ public class utlEip {
             String dataXml = utlxml.convertObjectToXml(param);
             log.debug("dataXml => " + dataXml);
             res = http.doPost(url.toString(), dataXml, null);
-
+            
+            log.debug("res1 = " + res);
+            StringBuffer resBuf = new StringBuffer(res);
+            log.debug("len = " + resBuf.length());
+            log.debug("index = " + resBuf.lastIndexOf("/"));
+            resBuf.insert(resBuf.lastIndexOf("/"), "\nlastCommand=\"" + dataXml.replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("\"", "").replaceAll("<", "{").replaceAll("/>", "}") + "\"");
+            res = resBuf.toString();
+            
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+        log.debug("res = " + res);
+        log.debug("***************************************************");
         return res;
     }
 
@@ -137,9 +150,17 @@ public class utlEip {
             String dataXml = utlxml.convertObjectToXml(param);
             log.debug("dataXml => " + dataXml);
             res = http.doPost(url.toString(), dataXml, null);
+            
+            StringBuffer resBuf = new StringBuffer(res);
+            log.debug("len = " + resBuf.length());
+            log.debug("index = " + resBuf.lastIndexOf("/"));
+            resBuf.insert(resBuf.lastIndexOf("/"), " lastCommand=\"" + dataXml + "\"");
+            res = resBuf.toString();
+            
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+        log.debug("res = " + res);
         return res;
     }
 

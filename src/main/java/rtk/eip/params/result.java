@@ -23,6 +23,7 @@ public class result {
 
     private String resultCode;
     private String resultComment;
+    private String lastCommand;
 
     @XmlAttribute
     public String getResultCode() {
@@ -40,6 +41,15 @@ public class result {
 
     public void setResultComment(String resultComment) {
         this.resultComment = resultComment;
+    }
+
+    @XmlAttribute
+    public String getLastCommand() {
+        return lastCommand;
+    }
+
+    public void setLastCommand(String lastCommand) {
+        this.lastCommand = lastCommand;
     }
 
     public String convertObjectToXml() {
@@ -76,7 +86,7 @@ public class result {
 
     @Override
     public String toString() {
-        return "result{" + "resultCode=" + resultCode + ", resultComment=" + resultComment + '}';
+        return "result{" + "resultCode=" + resultCode + ", resultComment=" + resultComment + ", lastCommand=" + lastCommand + '}';
     }
 
 }

@@ -24,13 +24,10 @@ import javax.persistence.Table;
  * @author vasil
  */
 @NamedQueries({
-    @NamedQuery(name = "getAttributeByName", query = "select u from UserAttribute u where u.name = :name")
-    ,
-    @NamedQuery(name = "getAttributeById", query = "select u from UserAttribute u where u.id = :id")
-    ,    
-    @NamedQuery(name = "getAllAttributesByUsers", query = "select u from UserAttribute u where u.userId=:userId")
-    ,
-    @NamedQuery(name = "findAttributeByUserName", query = "select u from UserAttribute u where u.userId = :userId and u.name = :name"),})
+    @NamedQuery(name = "getAttributeByName", query = "select u from UserAttribute u where u.name = :name"),
+    @NamedQuery(name = "getAttributeById", query = "select u from UserAttribute u where u.id = :id"),    
+    @NamedQuery(name = "getAllAttributesByUsers", query = "select u from UserAttribute u where u.userId=:userId"),
+    @NamedQuery(name = "findAttributeByUserName", query = "select u from UserAttribute u where u.userId = :userId and u.name = :name")})
 
 @Entity
 @Table(name = "t_user_attribute", indexes = {
