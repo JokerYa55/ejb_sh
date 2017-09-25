@@ -60,8 +60,12 @@ public class utlEip {
             log.debug("dataXml => " + dataXml);
             res = http.doPost(url.toString(), dataXml, null);
             
+            log.debug("res1 = " + res);
             StringBuffer resBuf = new StringBuffer(res);
-            resBuf.insert(resBuf.lastIndexOf("/"), " lastCommand=\"" + dataXml + "\"");            
+            log.debug("len = " + resBuf.length());
+            log.debug("index = " + resBuf.lastIndexOf("/"));
+            resBuf.insert(resBuf.lastIndexOf("/"), "\nlastCommand=\"" + dataXml.replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("\"", "'").replaceAll("<", "{").replaceAll("/>", "}").replaceAll(">", "}") + "\"");
+            //.replaceAll("<?", "{").replaceAll("?>", "}")
             res = resBuf.toString();
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,7 +122,8 @@ public class utlEip {
             StringBuffer resBuf = new StringBuffer(res);
             log.debug("len = " + resBuf.length());
             log.debug("index = " + resBuf.lastIndexOf("/"));
-            resBuf.insert(resBuf.lastIndexOf("/"), "\nlastCommand=\"" + dataXml.replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("\"", "").replaceAll("<", "{").replaceAll("/>", "}") + "\"");
+            resBuf.insert(resBuf.lastIndexOf("/"), "\nlastCommand=\"" + dataXml.replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("\"", "'").replaceAll("<", "{").replaceAll("/>", "}").replaceAll(">", "}") + "\"");
+            //.replaceAll("<?", "{").replaceAll("?>", "}")
             res = resBuf.toString();
             
         } catch (Exception e) {
@@ -151,10 +156,12 @@ public class utlEip {
             log.debug("dataXml => " + dataXml);
             res = http.doPost(url.toString(), dataXml, null);
             
+            log.debug("res1 = " + res);
             StringBuffer resBuf = new StringBuffer(res);
             log.debug("len = " + resBuf.length());
             log.debug("index = " + resBuf.lastIndexOf("/"));
-            resBuf.insert(resBuf.lastIndexOf("/"), " lastCommand=\"" + dataXml + "\"");
+            resBuf.insert(resBuf.lastIndexOf("/"), "\nlastCommand=\"" + dataXml.replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("\"", "'").replaceAll("<", "{").replaceAll("/>", "}").replaceAll(">", "}") + "\"");
+            //.replaceAll("<?", "{").replaceAll("?>", "}")
             res = resBuf.toString();
             
         } catch (Exception e) {

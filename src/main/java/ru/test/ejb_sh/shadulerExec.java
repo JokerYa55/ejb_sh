@@ -45,7 +45,7 @@ public class shadulerExec {
     @PersistenceContext(unitName = "elk_sh_jpa")
     protected EntityManager em;
 
-    @Schedule(minute = "*/2", hour = "*")
+    @Schedule(minute = "*/1", hour = "*")
     public void runSh() {
         try {
             //i++;
@@ -104,7 +104,7 @@ public class shadulerExec {
                             log.debug("resXml = " + utlXML.xmlToString(resXml));
                             resultCode = root.getAttribute("resultCode");
                             String lastCommand = root.getAttribute("lastCommand");                            
-                            item.setLast_command(res);
+                            item.setLast_command(lastCommand);
                             log.debug("resultCode = " + resultCode);
                             if (resultCode.equals("0")) {
                                 item.setFlag(true);
