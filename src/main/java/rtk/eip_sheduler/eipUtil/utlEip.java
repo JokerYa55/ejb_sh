@@ -127,7 +127,7 @@ public class utlEip {
         try {
             changePasswordParam param = new changePasswordParam();
             param.setHash(user.getPassword());
-            param.setHashType(user.getHesh_type());
+            param.setHashType(user.getHesh_type().toUpperCase());
             param.setReqType("CHANGE_PASSWORD");
             param.setSalt(user.getSalt());
             param.setUser(user.getUsername());
