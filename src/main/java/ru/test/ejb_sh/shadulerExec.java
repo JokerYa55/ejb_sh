@@ -45,12 +45,12 @@ public class shadulerExec {
     @PersistenceContext(unitName = "elk_sh_jpa")
     protected EntityManager em;
 
-    @Schedule(minute = "*/1", hour = "*")
+    @Schedule(minute = "*/2", hour = "*")
     public void runSh() {
         try {
             //i++;
 
-            utlEip Eip = new utlEip(new URL("http://10.31.70.120/elkProxy"));
+            utlEip Eip = new utlEip(new URL("http://192.168.1.150:8080/elkAdminRest/elkadm/addUser1"));
 
             log.debug("***************************************************************************************");
             log.debug("\tStart => " + (new Date()).toString());
@@ -97,12 +97,14 @@ public class shadulerExec {
 //                            Matcher m = p.matcher(item.getInfo());
 
                             res = Eip.updateUser(user);
-                            item.setLast_command(res);
+                            item.setLast_res(res);
                             resXml = stringToXml(res);
                             log.debug(resXml);
                             root = resXml.getDocumentElement();
                             log.debug("resXml = " + utlXML.xmlToString(resXml));
                             resultCode = root.getAttribute("resultCode");
+                            String lastCommand = root.getAttribute("lastCommand");                            
+                            item.setLast_command(res);
                             log.debug("resultCode = " + resultCode);
                             if (resultCode.equals("0")) {
                                 item.setFlag(true);
