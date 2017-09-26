@@ -50,9 +50,9 @@ public class shadulerExec {
         try {
             //i++;
 
-            utlEip Eip = new utlEip(new URL("http://192.168.1.150:8080/elkAdminRest/elkadm/addUser1"));
+            utlEip Eip = new utlEip(new URL("http://10.31.70.120/elkProxy"));
 
-            log.debug("***************************************************************************************");
+            log.debug("\n\n********************************* " + new Date() + " ******************************************************");
             log.debug("\tStart => " + (new Date()).toString());
 
             Map<String, Object> param = new HashMap<>();
@@ -65,60 +65,20 @@ public class shadulerExec {
 
             for (UsersLog item : logList) {
                 try {
-                    log.debug("\t\tlog record => " + item);
+                    log.debug("\t\t---------------------------- log record => " + item + " --------------------------");
                     UserEntity user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
-                    log.debug("\t\t\tuser => " + user);
+                    if (user != null) {
+                        log.debug("\t\t\tuser => " + user);
 
-                    String res = null;
-                    Document resXml = null;
-                    Element root;
-                    String resultCode;
-                    String lastCommand;
+                        String res = null;
+                        Document resXml = null;
+                        Element root;
+                        String resultCode;
+                        String lastCommand;
 
-                    switch (item.getOperType().toUpperCase()) {
-                        case "I":
-                            res = Eip.addUser(user);
-                            item.setLast_res(res);
-                            resXml = stringToXml(res);
-                            log.debug(resXml);
-                            root = resXml.getDocumentElement();
-                            log.debug("resXml = " + utlXML.xmlToString(resXml));
-                            resultCode = root.getAttribute("resultCode");
-                            lastCommand = root.getAttribute("lastCommand");
-                            item.setLast_command(lastCommand);
-                            log.debug("resultCode = " + resultCode);
-                            if (resultCode.equals("0")) {
-                                item.setFlag(true);
-                            } else {
-                                item.setFlag(false);
-                                item.setSend_count(item.getSend_count() + 1);
-                            }
-                            break;
-                        case "U":
-                            // Если поменялся пароль
-//                            Pattern p = Pattern.compile("^(<\\w+>)*$");
-//                            Matcher m = p.matcher(item.getInfo());
-
-                            res = Eip.updateUser(user);
-                            item.setLast_res(res);
-                            resXml = stringToXml(res);
-                            log.debug(resXml);
-                            root = resXml.getDocumentElement();
-                            log.debug("resXml = " + utlXML.xmlToString(resXml));
-                            resultCode = root.getAttribute("resultCode");
-                            lastCommand = root.getAttribute("lastCommand");
-                            item.setLast_command(lastCommand);
-                            log.debug("resultCode = " + resultCode);
-                            if (resultCode.equals("0")) {
-                                item.setFlag(true);
-                            } else {
-                                item.setFlag(false);
-                                item.setSend_count(item.getSend_count() + 1);
-                            }
-
-                            // Обновляем если пароль
-                            if (item.getInfo().contains("<password>")) {
-                                res = Eip.changePassword(user);
+                        switch (item.getOperType().toUpperCase()) {
+                            case "I":
+                                res = Eip.addUser(user);
                                 item.setLast_res(res);
                                 resXml = stringToXml(res);
                                 log.debug(resXml);
@@ -134,11 +94,56 @@ public class shadulerExec {
                                     item.setFlag(false);
                                     item.setSend_count(item.getSend_count() + 1);
                                 }
-                            }
-                            break;
-                        case "D":
-                            break;
-                        default: ;
+                                break;
+                            case "U":
+                                // Если поменялся пароль
+//                            Pattern p = Pattern.compile("^(<\\w+>)*$");
+//                            Matcher m = p.matcher(item.getInfo());
+
+                                res = Eip.updateUser(user);
+                                item.setLast_res(res);
+                                resXml = stringToXml(res);
+                                log.debug(resXml);
+                                root = resXml.getDocumentElement();
+                                log.debug("resXml = " + utlXML.xmlToString(resXml));
+                                resultCode = root.getAttribute("resultCode");
+                                lastCommand = root.getAttribute("lastCommand");
+                                item.setLast_command(lastCommand);
+                                log.debug("resultCode = " + resultCode);
+                                if (resultCode.equals("0")) {
+                                    item.setFlag(true);
+                                } else {
+                                    item.setFlag(false);
+                                    item.setSend_count(item.getSend_count() + 1);
+                                }
+
+                                // Обновляем если пароль
+                                if (item.getInfo().contains("<password>")) {
+                                    res = Eip.changePassword(user);
+                                    item.setLast_res(res);
+                                    resXml = stringToXml(res);
+                                    log.debug(resXml);
+                                    root = resXml.getDocumentElement();
+                                    log.debug("resXml = " + utlXML.xmlToString(resXml));
+                                    resultCode = root.getAttribute("resultCode");
+                                    lastCommand = root.getAttribute("lastCommand");
+                                    item.setLast_command(lastCommand);
+                                    log.debug("resultCode = " + resultCode);
+                                    if (resultCode.equals("0")) {
+                                        item.setFlag(true);
+                                    } else {
+                                        item.setFlag(false);
+                                        item.setSend_count(item.getSend_count() + 1);
+                                    }
+                                }
+                                break;
+                            case "D":
+                                break;
+                            default: ;
+                        }
+                    } else {
+                        item.setFlag(true);
+                        item.setInfo("<NO User id = " + item.getUserId() + " name = " + item.getUsername() + ">");
                     }
                 } catch (Exception ex1) {
                     log.error(ex1.getMessage());
