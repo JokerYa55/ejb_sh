@@ -39,7 +39,7 @@ import rtk.eip_sheduler.eipUtil.utlEip;
 public class shadulerExec {
 
     private final Logger log = Logger.getLogger(getClass().getName());
-    private long i = 0;
+    private final long i = 0;
     private final String propFileName = "app.properties";
 
     @PersistenceContext(unitName = "elk_sh_jpa")
