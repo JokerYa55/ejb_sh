@@ -21,10 +21,10 @@ import rtk.eip_sheduler.httpUtil.utlHttp;
  * @author vasil
  */
 public class utlEip {
-
+    
     private final URL url;
     private final Logger log = Logger.getLogger(getClass().getName());
-
+    
     public utlEip(URL url) {
         this.url = url;
     }
@@ -40,6 +40,9 @@ public class utlEip {
         try {
             addUserParam param = new addUserParam();
             param.setContactEmail(user.getEmail());
+            if (user.getPhone().length() != 10) {
+                log.warn("Неврная длина номера телефона : " + user.getPhone() + " len = " + user.getPhone().length());
+            }
             param.setContactPhone(user.getPhone());
             param.setReqType("CREATE_USER_PASSWORD");
             param.setSalt(user.getSalt());
@@ -51,11 +54,13 @@ public class utlEip {
             param.setPatronymic(user.getThirdName());
             if (user.getUser_region() != null) {
                 param.setRegion(user.getUser_region().toString());
+            } else {
+                log.warn("Не определен регион");
             }
-
+            
             utlHttp http = new utlHttp();
             utlXML utlxml = new utlXML();
-
+            
             String dataXml = utlxml.convertObjectToXml(param);
             log.debug("dataXml => " + dataXml);
             res = http.doPost(url.toString(), dataXml, null);
@@ -82,7 +87,7 @@ public class utlEip {
     public String updateUser(UserEntity user) {
         log.debug("UPD_USER");
         String res = null;
-
+        
         try {
             updUserParam param = new updUserParam();
             if (user.getEmail() != null) {
@@ -91,7 +96,7 @@ public class utlEip {
             if (user.getPhone() != null) {
                 param.setContactPhone(user.getPhone());
             }
-
+            
             param.setReqType("EDIT_USER");
             if (user.getUsername() != null) {
                 param.setUser(user.getUsername());
@@ -111,7 +116,7 @@ public class utlEip {
             if ((user.getUser_status() != null) && (user.getUser_status() != 0)) {
                 param.setUserStatus(user.getUser_status().toString());
             }
-
+            
             utlHttp http = new utlHttp();
             utlXML utlxml = new utlXML();
             String dataXml = utlxml.convertObjectToXml(param);
@@ -149,7 +154,7 @@ public class utlEip {
             param.setReqType("CHANGE_PASSWORD");
             param.setSalt(user.getSalt());
             param.setUser(user.getUsername());
-
+            
             utlHttp http = new utlHttp();
             utlXML utlxml = new utlXML();
             String dataXml = utlxml.convertObjectToXml(param);
@@ -170,5 +175,5 @@ public class utlEip {
         log.debug("res = " + res);
         return res;
     }
-
+    
 }
