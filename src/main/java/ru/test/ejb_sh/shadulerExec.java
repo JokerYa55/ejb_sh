@@ -52,8 +52,8 @@ public class shadulerExec {
 
             utlEip Eip = new utlEip(new URL("http://10.31.70.120/elkProxy"));
 
-            log.debug("\n\n********************************* " + new Date() + " ******************************************************");
-            log.debug("\tStart => " + (new Date()).toString());
+            log.info("\n\n********************************* " + new Date() + " ******************************************************");
+            log.info("\tStart => " + (new Date()).toString());
 
             Map<String, Object> param = new HashMap<>();
             param.put("flag", false);
@@ -61,14 +61,14 @@ public class shadulerExec {
             List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class, param);
             //List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class);
 
-            log.debug("\tcount => " + logList.size());
+            log.info("\tcount => " + logList.size());
 
             for (UsersLog item : logList) {
                 try {
-                    log.debug("\t\t---------------------------- log record => " + item + " --------------------------");
+                    log.info("\t\t---------------------------- log record => " + item + " --------------------------");
                     UserEntity user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
                     if (user != null) {
-                        log.debug("\t\t\tuser => " + user);
+                        log.info("\t\t\tuser => " + user);
 
                         String res = null;
                         Document resXml = null;
