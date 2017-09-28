@@ -65,7 +65,7 @@ public class shadulerExec {
             log.info("URL = " + url);
             
             prop = null;
-            prop = appDAO.getItem("send_count");
+            prop = appDAO.getItem("max_send_count");
             String sendCount = prop.getParam_value();
             
             log.info("send_count = " + sendCount);
