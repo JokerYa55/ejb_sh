@@ -62,6 +62,8 @@ public class shadulerExec {
             AppProperties prop = appDAO.getItem("url");            
             String url = prop.getParam_value();
             
+            log.info("URL = " + url);
+            
             prop = null;
             prop = appDAO.getItem("send_count");
             String sendCount = prop.getParam_value();
@@ -74,7 +76,7 @@ public class shadulerExec {
             
             log.info("max_rec_user_log = " + maxRecUserLog);
             
-            log.debug("\tURL => " + url);
+            //log.debug("\tURL => " + url);
 //            "http://192.168.1.150:8080/elkAdminRest/elkadm/addUser1"
             utlEip Eip = new utlEip(new URL(url));
             
