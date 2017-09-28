@@ -23,10 +23,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import rtk.eip_sheduler.DAO.AppPropertiesDAO;
 import rtk.eip_sheduler.DAO.UserEntityDAO;
 import rtk.eip_sheduler.DAO.UsersLogDAO;
 import rtk.eip_sheduler.XMLUtil.utlXML;
 import static rtk.eip_sheduler.XMLUtil.utlXML.stringToXml;
+import rtk.eip_sheduler.beans.AppProperties;
 import rtk.eip_sheduler.beans.UserEntity;
 import rtk.eip_sheduler.beans.UsersLog;
 import rtk.eip_sheduler.eipUtil.utlEip;
@@ -52,7 +54,18 @@ public class shadulerExec {
         try {
             //i++;
 
-            utlEip Eip = new utlEip(new URL("http://10.31.70.120/elkProxy"));
+            
+            log.debug("***************************************************************************************");
+            log.debug("\tStart => " + (new Date()).toString());
+            
+            AppPropertiesDAO appDAO = new AppPropertiesDAO(em);
+            AppProperties prop = appDAO.getItem("url");
+            String url = prop.getParam_value();
+            log.debug("\tURL => " + url);
+            //"http://192.168.1.150:8080/elkAdminRest/elkadm/addUser1"
+            utlEip Eip = new utlEip(new URL(url));
+            
+//            utlEip Eip = new utlEip(new URL("http://10.31.70.120/elkProxy"));
 
             log.info("\n\n********************************* " + new Date() + " ******************************************************");
             log.info("\tStart => " + (new Date()).toString());

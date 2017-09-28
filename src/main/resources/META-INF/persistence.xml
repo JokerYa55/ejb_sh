@@ -5,6 +5,7 @@
     <class>rtk.eip_sheduler.beans.UserAttribute</class>
     <class>rtk.eip_sheduler.beans.UsersLog</class>
     <class>rtk.eip_sheduler.beans.UserEntity</class>
+    <class>rtk.eip_sheduler.beans.AppProperties</class>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.format_sql" value="true"/>
