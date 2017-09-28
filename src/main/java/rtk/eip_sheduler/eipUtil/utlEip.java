@@ -35,7 +35,7 @@ public class utlEip {
      * @return
      */
     public String addUser(UserEntity user) {
-        log.debug("ADD_USER");
+        log.info("ADD_USER");
         String res = null;
         try {
             addUserParam param = new addUserParam();
@@ -62,13 +62,13 @@ public class utlEip {
             utlXML utlxml = new utlXML();
             
             String dataXml = utlxml.convertObjectToXml(param);
-            log.debug("dataXml => " + dataXml);
+            log.info("dataXml => " + dataXml);
             res = http.doPost(url.toString(), dataXml, null);
             
-            log.debug("res1 = " + res);
+            log.info("res1 = " + res);
             StringBuffer resBuf = new StringBuffer(res);
-            log.debug("len = " + resBuf.length());
-            log.debug("index = " + resBuf.lastIndexOf("/"));
+            log.info("len = " + resBuf.length());
+            log.info("index = " + resBuf.lastIndexOf("/"));
             resBuf.insert(resBuf.lastIndexOf("/"), "\nlastCommand=\"" + dataXml.replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("\"", "'").replaceAll("<", "{").replaceAll("/>", "}").replaceAll(">", "}") + "\"");
             //.replaceAll("<?", "{").replaceAll("?>", "}")
             res = resBuf.toString();
@@ -85,7 +85,7 @@ public class utlEip {
      * @return
      */
     public String updateUser(UserEntity user) {
-        log.debug("UPD_USER");
+        log.info("UPD_USER");
         String res = null;
         
         try {
@@ -120,13 +120,13 @@ public class utlEip {
             utlHttp http = new utlHttp();
             utlXML utlxml = new utlXML();
             String dataXml = utlxml.convertObjectToXml(param);
-            log.debug("dataXml => " + dataXml);
+            log.info("dataXml => " + dataXml);
             res = http.doPost(url.toString(), dataXml, null);
             
-            log.debug("res1 = " + res);
+            log.info("res1 = " + res);
             StringBuffer resBuf = new StringBuffer(res);
-            log.debug("len = " + resBuf.length());
-            log.debug("index = " + resBuf.lastIndexOf("/"));
+            log.info("len = " + resBuf.length());
+            log.info("index = " + resBuf.lastIndexOf("/"));
             resBuf.insert(resBuf.lastIndexOf("/"), "\nlastCommand=\"" + dataXml.replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("\"", "'").replaceAll("<", "{").replaceAll("/>", "}").replaceAll(">", "}") + "\"");
             //.replaceAll("<?", "{").replaceAll("?>", "}")
             res = resBuf.toString();
@@ -134,8 +134,8 @@ public class utlEip {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        log.debug("res = " + res);
-        log.debug("***************************************************");
+        log.info("res = " + res);
+        log.info("***************************************************");
         return res;
     }
 
@@ -158,13 +158,13 @@ public class utlEip {
             utlHttp http = new utlHttp();
             utlXML utlxml = new utlXML();
             String dataXml = utlxml.convertObjectToXml(param);
-            log.debug("dataXml => " + dataXml);
+            log.info("dataXml => " + dataXml);
             res = http.doPost(url.toString(), dataXml, null);
             
-            log.debug("res1 = " + res);
+            log.info("res1 = " + res);
             StringBuffer resBuf = new StringBuffer(res);
-            log.debug("len = " + resBuf.length());
-            log.debug("index = " + resBuf.lastIndexOf("/"));
+            log.info("len = " + resBuf.length());
+            log.info("index = " + resBuf.lastIndexOf("/"));
             resBuf.insert(resBuf.lastIndexOf("/"), "\nlastCommand=\"" + dataXml.replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("\"", "'").replaceAll("<", "{").replaceAll("/>", "}").replaceAll(">", "}") + "\"");
             //.replaceAll("<?", "{").replaceAll("?>", "}")
             res = resBuf.toString();
@@ -172,7 +172,7 @@ public class utlEip {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        log.debug("res = " + res);
+        log.info("res = " + res);
         return res;
     }
     

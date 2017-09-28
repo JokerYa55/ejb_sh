@@ -81,13 +81,13 @@ public class shadulerExec {
                                 res = Eip.addUser(user);
                                 item.setLast_res(res);
                                 resXml = stringToXml(res);
-                                log.debug(resXml);
+                                log.info(resXml);
                                 root = resXml.getDocumentElement();
-                                log.debug("resXml = " + utlXML.xmlToString(resXml));
+                                log.info("resXml = " + utlXML.xmlToString(resXml));
                                 resultCode = root.getAttribute("resultCode");
                                 lastCommand = root.getAttribute("lastCommand");
                                 item.setLast_command(lastCommand);
-                                log.debug("resultCode = " + resultCode);
+                                log.info("resultCode = " + resultCode);
                                 if (resultCode.equals("0")) {
                                     item.setFlag(true);
                                 } else {
@@ -103,13 +103,13 @@ public class shadulerExec {
                                 res = Eip.updateUser(user);
                                 item.setLast_res(res);
                                 resXml = stringToXml(res);
-                                log.debug(resXml);
+                                log.info(resXml);
                                 root = resXml.getDocumentElement();
-                                log.debug("resXml = " + utlXML.xmlToString(resXml));
+                                log.info("resXml = " + utlXML.xmlToString(resXml));
                                 resultCode = root.getAttribute("resultCode");
                                 lastCommand = root.getAttribute("lastCommand");
                                 item.setLast_command(lastCommand);
-                                log.debug("resultCode = " + resultCode);
+                                log.info("resultCode = " + resultCode);
                                 if (resultCode.equals("0")) {
                                     item.setFlag(true);
                                 } else {
@@ -122,13 +122,13 @@ public class shadulerExec {
                                     res = Eip.changePassword(user);
                                     item.setLast_res(res);
                                     resXml = stringToXml(res);
-                                    log.debug(resXml);
+                                    log.info(resXml);
                                     root = resXml.getDocumentElement();
-                                    log.debug("resXml = " + utlXML.xmlToString(resXml));
+                                    log.info("resXml = " + utlXML.xmlToString(resXml));
                                     resultCode = root.getAttribute("resultCode");
                                     lastCommand = root.getAttribute("lastCommand");
                                     item.setLast_command(lastCommand);
-                                    log.debug("resultCode = " + resultCode);
+                                    log.info("resultCode = " + resultCode);
                                     if (resultCode.equals("0")) {
                                         item.setFlag(true);
                                     } else {
@@ -149,7 +149,7 @@ public class shadulerExec {
                     log.error(ex1.getMessage());
                 }
 
-                log.debug("item => " + item);
+                log.info("item => " + item);
                 //em.merge(item);
                 (new UsersLogDAO(em)).updateItem(item);
             }
