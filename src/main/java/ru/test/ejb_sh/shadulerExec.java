@@ -59,10 +59,23 @@ public class shadulerExec {
             log.debug("\tStart => " + (new Date()).toString());
             
             AppPropertiesDAO appDAO = new AppPropertiesDAO(em);
-            AppProperties prop = appDAO.getItem("url");
+            AppProperties prop = appDAO.getItem("url");            
             String url = prop.getParam_value();
+            
+            prop = null;
+            prop = appDAO.getItem("send_count");
+            String sendCount = prop.getParam_value();
+            
+            log.info("send_count = " + sendCount);
+            
+            prop = null;
+            prop = appDAO.getItem("max_rec_user_log");
+            String maxRecUserLog = prop.getParam_value();
+            
+            log.info("max_rec_user_log = " + maxRecUserLog);
+            
             log.debug("\tURL => " + url);
-            //"http://192.168.1.150:8080/elkAdminRest/elkadm/addUser1"
+//            "http://192.168.1.150:8080/elkAdminRest/elkadm/addUser1"
             utlEip Eip = new utlEip(new URL(url));
             
 //            utlEip Eip = new utlEip(new URL("http://10.31.70.120/elkProxy"));
@@ -72,8 +85,8 @@ public class shadulerExec {
 
             Map<String, Object> param = new HashMap<>();
             param.put("flag", false);
-            param.put("send_count", 10);
-            param.put("limit", 30);
+            param.put("send_count", new Integer(sendCount));
+            param.put("limit", new Integer(maxRecUserLog));
             List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class, param);
             //List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class);
 
