@@ -27,14 +27,14 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "t_users_log")
 @NamedQueries({
-    @NamedQuery(name = "UsersLog.findAll", query = "SELECT t FROM UsersLog t where t.flag = false and t.send_count<=:send_count")
-    , @NamedQuery(name = "UsersLog.findById", query = "SELECT t FROM UsersLog t WHERE t.id = :id and t.flag = false and t.send_count<=:send_count")
-    , @NamedQuery(name = "UsersLog.findByFlag", query = "SELECT t FROM UsersLog t WHERE t.flag = :flag and t.send_count<=:send_count order by t.id")
-    , @NamedQuery(name = "UsersLog.findByNoSend", query = "SELECT t FROM UsersLog t WHERE t.flag = false and t.send_count<=10")
-    , @NamedQuery(name = "UsersLog.findByOperType", query = "SELECT t FROM UsersLog t WHERE t.operType = :operType and t.flag = false and t.send_count<=:send_count")
-    , @NamedQuery(name = "UsersLog.findByUserId", query = "SELECT t FROM UsersLog t WHERE t.userId = :userId and t.flag = false and t.send_count<=:send_count")
-    , @NamedQuery(name = "UsersLog.findByUsername", query = "SELECT t FROM UsersLog t WHERE t.username = :username and t.flag = false and t.send_count<=:send_count")
-    , @NamedQuery(name = "UsersLog.findByDateOper", query = "SELECT t FROM UsersLog t WHERE t.dateOper = :dateOper and t.flag = false and t.send_count<=:send_count")})
+    @NamedQuery(name = "UsersLog.findAll", query = "SELECT t FROM UsersLog t where t.flag = false and t.send_count<:send_count")
+    , @NamedQuery(name = "UsersLog.findById", query = "SELECT t FROM UsersLog t WHERE t.id = :id and t.flag = false and t.send_count<:send_count")
+    , @NamedQuery(name = "UsersLog.findByFlag", query = "SELECT t FROM UsersLog t WHERE t.flag = :flag and t.send_count<:send_count order by t.id")
+    , @NamedQuery(name = "UsersLog.findByNoSend", query = "SELECT t FROM UsersLog t WHERE t.flag = false and t.send_count<10")
+    , @NamedQuery(name = "UsersLog.findByOperType", query = "SELECT t FROM UsersLog t WHERE t.operType = :operType and t.flag = false and t.send_count<:send_count")
+    , @NamedQuery(name = "UsersLog.findByUserId", query = "SELECT t FROM UsersLog t WHERE t.userId = :userId and t.flag = false and t.send_count<:send_count")
+    , @NamedQuery(name = "UsersLog.findByUsername", query = "SELECT t FROM UsersLog t WHERE t.username = :username and t.flag = false and t.send_count<:send_count")
+    , @NamedQuery(name = "UsersLog.findByDateOper", query = "SELECT t FROM UsersLog t WHERE t.dateOper = :dateOper and t.flag = false and t.send_count<:send_count")})
 public class UsersLog implements Serializable {
 
     //private static final long serialVersionUID = 1L;

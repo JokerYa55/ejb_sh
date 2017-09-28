@@ -92,11 +92,12 @@ public class shadulerExec {
                                 item.setLast_command(lastCommand);
                                 log.info("resultCode = " + resultCode);
                                 if (resultCode.equals("0")) {
-                                    item.setFlag(true);
+                                    item.setFlag(true);                                    
                                 } else {
                                     item.setFlag(false);
-                                    item.setSend_count(item.getSend_count() + 1);
+                                    //item.setSend_count(item.getSend_count() + 1);
                                 }
+                                item.setSend_count(item.getSend_count() + 1);
                                 break;
                             case "U":
                                 // Если поменялся пароль
@@ -116,10 +117,9 @@ public class shadulerExec {
                                 if (resultCode.equals("0")) {
                                     item.setFlag(true);
                                 } else {
-                                    item.setFlag(false);
-                                    item.setSend_count(item.getSend_count() + 1);
+                                    item.setFlag(false);                                    
                                 }
-
+                                item.setSend_count(item.getSend_count() + 1);        
                                 // Обновляем если пароль
                                 if (item.getInfo().contains("<password>")) {
                                     res = Eip.changePassword(user);
@@ -135,9 +135,9 @@ public class shadulerExec {
                                     if (resultCode.equals("0")) {
                                         item.setFlag(true);
                                     } else {
-                                        item.setFlag(false);
-                                        item.setSend_count(item.getSend_count() + 1);
+                                        item.setFlag(false);                                        
                                     }
+                                    item.setSend_count(item.getSend_count() + 1);
                                 }
                                 break;
                             case "D":
