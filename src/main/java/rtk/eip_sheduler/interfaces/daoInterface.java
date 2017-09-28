@@ -28,7 +28,7 @@ public interface daoInterface<T, V> {
      * @param Item
      * @return
      */
-    @Transactional 
+    @Transactional
     default public T addItem(T Item) {
         T res = null;
         try {
@@ -47,7 +47,7 @@ public interface daoInterface<T, V> {
      * @param Item
      * @return
      */
-    @Transactional 
+    @Transactional
     default public boolean deleteItem(T Item) {
         boolean res = true;
         try {
@@ -67,7 +67,7 @@ public interface daoInterface<T, V> {
      * @param Item
      * @return
      */
-    @Transactional 
+    @Transactional
     default public boolean updateItem(T Item) {
         System.out.println("updateItem => " + Item);
         boolean res = false;
@@ -132,13 +132,27 @@ public interface daoInterface<T, V> {
         try {
             EntityManager em = getEM();
             TypedQuery<T> namedQuery = em.createNamedQuery(jpqName, cl);
+            int plimit = 0;
             if (params != null) {
-                params.forEach((key, val) -> {
-                    namedQuery.setParameter(key, val);
-                });
+                for (Map.Entry<String, Object> entry : params.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    if (!key.equals("limit")) {
+                        namedQuery.setParameter(key, value);
+                    } else {
+                        plimit = (int) value;
+                    }
+                }
+//                params.forEach((key, val) -> {
+//                    
+//                });
             }
             //namedQuery.setParameter("id", id);
-            res = namedQuery.getResultList();
+            if (plimit == 0) {
+                res = namedQuery.getResultList();
+            } else {
+                res = namedQuery.setMaxResults(plimit).getResultList();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

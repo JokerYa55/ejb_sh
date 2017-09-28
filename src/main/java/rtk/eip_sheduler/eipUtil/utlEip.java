@@ -49,8 +49,8 @@ public class utlEip {
             param.setHash(user.getPassword());
             param.setHash_type(user.getHesh_type().toUpperCase());
             param.setUser(user.getUsername());
-            param.setSurname(user.getFirstName());
-            param.setName(user.getLastName());
+            param.setSurname(user.getLastName());
+            param.setName(user.getFirstName());
             param.setPatronymic(user.getThirdName());
             if (user.getUser_region() != null) {
                 param.setRegion(user.getUser_region().toString());
@@ -102,10 +102,11 @@ public class utlEip {
                 param.setUser(user.getUsername());
             }
             if (user.getFirstName() != null) {
-                param.setSurname(user.getFirstName());
+                param.setName(user.getLastName());
             }
             if (user.getLastName() != null) {
-                param.setName(user.getLastName());
+                param.setSurname(user.getFirstName());
+                
             }
             if (user.getThirdName() != null) {
                 param.setPatronymic(user.getThirdName());

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import javax.ejb.Local;
+import javax.ejb.Lock;
 import org.jboss.logging.Logger;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -46,6 +47,7 @@ public class shadulerExec {
     protected EntityManager em;
 
     @Schedule(minute = "*/1", hour = "*")
+    @Lock
     public void runSh() {
         try {
             //i++;
@@ -58,6 +60,7 @@ public class shadulerExec {
             Map<String, Object> param = new HashMap<>();
             param.put("flag", false);
             param.put("send_count", 10);
+            param.put("limit", 30);
             List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class, param);
             //List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class);
 
