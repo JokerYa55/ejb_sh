@@ -30,7 +30,7 @@ public class utlEipTest {
 
     @BeforeClass
     public static void setUpClass() throws MalformedURLException {
-        Double user_num = random() * 1000;
+        Double user_num = random() * 100000;
         username = "sso_user_0" + user_num.intValue();
         instance = new utlEip(new URL("http://10.31.70.120/elkProxy"));
         System.out.println("user => " + username);
