@@ -101,7 +101,7 @@ public class UserEntity implements Serializable {
     @Column(name = "phone", nullable = true)
     private String phone;
     @Column(name = "hash_type", nullable = true)
-    private String hesh_type;
+    private String hash_type;
     @Column(name = "salt", nullable = true)
     private String salt;
     @Column(name = "user_status", unique = false, nullable = false, columnDefinition = "integer DEFAULT 0")
@@ -223,22 +223,6 @@ public class UserEntity implements Serializable {
     public void setHash(String hash) {
         //this.hash = keycloak.storage.util.hashUtil.sha1(this.password);
         this.password = hash;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getHesh_type() {
-        return hesh_type;
-    }
-
-    /**
-     *
-     * @param hesh_type
-     */
-    public void setHesh_type(String hesh_type) {
-        this.hesh_type = hesh_type;
     }
 
     /**
@@ -375,9 +359,19 @@ public class UserEntity implements Serializable {
         if (temp != null)this.userAttributeCollection.remove(temp);     */
 
     }
+    
+    public String getHash_type() {
+        return hash_type;
+    }
+
+    public void setHash_type(String hash_type) {
+        this.hash_type = hash_type;
+    }
 
     @Override
     public String toString() {
-        return "UserEntity{" + "id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", thirdName=" + thirdName + ", email=" + email + '}';
+        return "UserEntity{" + "id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", thirdName=" + thirdName + ", email=" + email + ", password=" + password + ", phone=" + phone + ", hash_type=" + hash_type + ", salt=" + salt + ", user_status=" + user_status + ", user_region=" + user_region + ", description=" + description + '}';
     }
+    
+    
 }

@@ -5,6 +5,9 @@
  */
 package rtk.eip_sheduler.eipUtil;
 
+import static java.lang.Math.random;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,41 +21,63 @@ import rtk.eip_sheduler.beans.UserEntity;
  * @author vasiliy.andricov
  */
 public class utlEipTest {
+
+    private String username;
     
     public utlEipTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
+        Double user_num = random() * 1000;
+        username = "sso_user_0" + user_num.intValue();
     }
-    
+
     @After
     public void tearDown() {
     }
 
     /**
      * Test of addUser method, of class utlEip.
+     *
+     * @throws java.net.MalformedURLException
      */
     @Test
-    public void testAddUser() {
+    public void testAddUser() throws MalformedURLException {
         System.out.println("TEST addUser");
         UserEntity user = new UserEntity();
-        String username = "SSO_user_0" + Math.random()*1000 ;
+
         user.setUsername(username);
-        utlEip instance = null;
-        String expResult = "";
+        user.setFirstName("Иван");
+        user.setLastName("Иванов");
+        user.setThirdName("Петрович");
+        user.setEmail(username + "@mail.ru");
+        user.setFirstName("Иван");
+        user.setHash("9FA6E2D3CF6621B2384633042868D42C810B78FE");
+        user.setHash_type("SHA1");
+        user.setSalt("8356239303");
+        user.setPhone("9274587879");
+        user.setUser_region(23);
+
+        utlEip instance = new utlEip(new URL("http://10.31.70.120/elkProxy"));
+
+        String expResult = "resultCode=\"0\"";
         String result = instance.addUser(user);
+        if (result.contains(expResult)) {
+            result = expResult;
+        }
+        //System.out.println("result = " + result);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //fail("The test case is a prototype.");
     }
 
     /**
@@ -84,5 +109,5 @@ public class utlEipTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-    
+
 }
