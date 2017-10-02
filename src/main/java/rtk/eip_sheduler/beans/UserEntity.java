@@ -55,7 +55,7 @@ import org.apache.log4j.Logger;
     , @NamedQuery(name = "userEntity.findById", query = "SELECT t FROM UserEntity t WHERE t.id = :id")
     //, @NamedQuery(name = "UserEntity.findByAddress", query = "SELECT t FROM UserEntity t WHERE t.address = :address and t.user_status = 0")
     , @NamedQuery(name = "userEntity.findByEmail", query = "SELECT t FROM UserEntity t WHERE t.email = :email and t.user_status = 0")
-    , @NamedQuery(name = "userEntity.findByHashType", query = "SELECT t FROM UserEntity t WHERE t.hesh_type = :hashType and t.user_status = 0")
+    , @NamedQuery(name = "userEntity.findByHashType", query = "SELECT t FROM UserEntity t WHERE t.hash_type = :hashType and t.user_status = 0")
     , @NamedQuery(name = "userEntity.findByPassword", query = "SELECT t FROM UserEntity t WHERE t.password = :password and t.user_status = 0")
     //, @NamedQuery(name = "UserEntity.findByPasswordNotHash", query = "SELECT t FROM UserEntity t WHERE t.password_not_hash = :passwordNotHash and t.user_status = 0")
     , @NamedQuery(name = "userEntity.findByPhone", query = "SELECT t FROM UserEntity t WHERE t.phone = :phone and t.user_status = 0")
