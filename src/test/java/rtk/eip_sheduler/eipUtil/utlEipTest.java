@@ -23,6 +23,7 @@ import rtk.eip_sheduler.beans.UserEntity;
 public class utlEipTest {
 
     private String username;
+    private utlEip instance = null;
     
     public utlEipTest() {
     }
@@ -36,9 +37,10 @@ public class utlEipTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws MalformedURLException {
         Double user_num = random() * 1000;
         username = "sso_user_0" + user_num.intValue();
+        instance = new utlEip(new URL("http://10.31.70.120/elkProxy"));
     }
 
     @After
@@ -51,7 +53,7 @@ public class utlEipTest {
      * @throws java.net.MalformedURLException
      */
     @Test
-    public void testAddUser() throws MalformedURLException {
+    public void testAddUser() {
         System.out.println("TEST addUser");
         UserEntity user = new UserEntity();
 
@@ -67,7 +69,7 @@ public class utlEipTest {
         user.setPhone("9274587879");
         user.setUser_region(23);
 
-        utlEip instance = new utlEip(new URL("http://10.31.70.120/elkProxy"));
+        
 
         String expResult = "resultCode=\"0\"";
         String result = instance.addUser(user);
@@ -86,10 +88,23 @@ public class utlEipTest {
     @Test
     public void testUpdateUser() {
         System.out.println("updateUser");
-        UserEntity user = null;
-        utlEip instance = null;
+        UserEntity user = new UserEntity();
+
+        user.setUsername(username);
+        user.setFirstName("Иван_1");
+        user.setLastName("Иванов_1");
+        user.setThirdName("Петрович_1");
+        user.setEmail(username + "@mail.ru");
+        user.setFirstName("Иван");
+        user.setHash("9FA6E2D3CF6621B2384633042868D42C810B78FE");
+        user.setHash_type("SHA1");
+        user.setSalt("8356239303");
+        user.setPhone("9274587879");
+        user.setUser_region(23);
+        
+        //utlEip instance = null;
         String expResult = "";
-        String result = instance.updateUser(user);
+        String result = this.instance.updateUser(user);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
