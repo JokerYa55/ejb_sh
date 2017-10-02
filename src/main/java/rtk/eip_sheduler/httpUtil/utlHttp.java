@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Пакет реализующий функционал протокола HTTP  
  */
 package rtk.eip_sheduler.httpUtil;
 
@@ -35,9 +33,9 @@ public class utlHttp {
     private final Logger log = Logger.getLogger(getClass().getName());
 
     /**
-     * Реализация POST запроса
+     * Реализация POST запроса с передачей параметров в виде xml
      * @param url           - аддрес по которому выполняется запрос
-     * @param params        - параметры запроса
+     * @param params        - параметры запроса в виде объекта. при отправке преобразуется в xml
      * @param headerList    - header запроса
      * @return 
      */
@@ -90,7 +88,7 @@ public class utlHttp {
     }
 
     /**
-     *
+     * Реализация POST запроса с параметрами в виде списка
      * @param url
      * @param params
      * @param headerList
@@ -136,7 +134,7 @@ public class utlHttp {
     }
 
     /**
-     *
+     * Реализация GET запроса
      * @param url
      * @param params
      * @param headerList
@@ -191,7 +189,7 @@ public class utlHttp {
     }
 
     /**
-     *
+     * Реализация PUT запроса
      * @param url
      * @param params
      * @param headerList
