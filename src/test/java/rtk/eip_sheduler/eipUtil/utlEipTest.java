@@ -22,14 +22,18 @@ import rtk.eip_sheduler.beans.UserEntity;
  */
 public class utlEipTest {
 
-    private String username;
-    private utlEip instance = null;
-    
+    private static  String username;
+    private static utlEip instance = null;
+
     public utlEipTest() {
     }
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws MalformedURLException {
+        Double user_num = random() * 1000;
+        username = "sso_user_0" + user_num.intValue();
+        instance = new utlEip(new URL("http://10.31.70.120/elkProxy"));
+        System.out.println("user => " + username);
     }
 
     @AfterClass
@@ -38,9 +42,7 @@ public class utlEipTest {
 
     @Before
     public void setUp() throws MalformedURLException {
-        Double user_num = random() * 1000;
-        username = "sso_user_0" + user_num.intValue();
-        instance = new utlEip(new URL("http://10.31.70.120/elkProxy"));
+        
     }
 
     @After
@@ -69,17 +71,12 @@ public class utlEipTest {
         user.setPhone("9274587879");
         user.setUser_region(23);
 
-        
-
         String expResult = "resultCode=\"0\"";
         String result = instance.addUser(user);
         if (result.contains(expResult)) {
             result = expResult;
         }
-        //System.out.println("result = " + result);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
     }
 
     /**
@@ -88,6 +85,7 @@ public class utlEipTest {
     @Test
     public void testUpdateUser() {
         System.out.println("updateUser");
+        //Thread.sleep(10000);
         UserEntity user = new UserEntity();
 
         user.setUsername(username);
@@ -101,13 +99,17 @@ public class utlEipTest {
         user.setSalt("8356239303");
         user.setPhone("9274587879");
         user.setUser_region(23);
-        
-        //utlEip instance = null;
-        String expResult = "";
+
         String result = this.instance.updateUser(user);
+
+        String expResult = "resultCode=\"0\"";
+        if (result.contains(expResult)) {
+            result = expResult;
+        }
+        System.out.println("res => " + result);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        // fail("The test case is a prototype.");
     }
 
     /**
@@ -116,13 +118,28 @@ public class utlEipTest {
     @Test
     public void testChangePassword() {
         System.out.println("changePassword");
-        UserEntity user = null;
-        utlEip instance = null;
-        String expResult = "";
+        //Thread.sleep(10000);
+        UserEntity user = new UserEntity();
+        user.setUsername(this.username);
+        user.setFirstName("Иван_1");
+        user.setLastName("Иванов_1");
+        user.setThirdName("Петрович_1");
+        user.setEmail(this.username + "@mail.ru");
+        user.setFirstName("Иван");
+        user.setHash("9FA6E2D3CF6621B2384633042868D42C810B78FE");
+        user.setHash_type("SHA1");
+        user.setSalt("8356239303");
+        user.setPhone("9274587879");
+        user.setUser_region(23);
+
         String result = instance.changePassword(user);
+        String expResult = "resultCode=\"0\"";
+        if (result.contains(expResult)) {
+            result = expResult;
+        }
+        System.out.println("res => " + result);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
 }
