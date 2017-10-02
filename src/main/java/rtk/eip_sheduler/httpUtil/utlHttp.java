@@ -27,43 +27,48 @@ import rtk.eip.params.result;
 import rtk.eip_sheduler.XMLUtil.utlXML;
 
 /**
- *
+ * Кллас реализует методы протокола HTTP
  * @author vasil
  */
 public class utlHttp {
 
     private final Logger log = Logger.getLogger(getClass().getName());
 
+    /**
+     * Реализация POST запроса
+     * @param url           - аддрес по которому выполняется запрос
+     * @param params        - параметры запроса
+     * @param headerList    - header запроса
+     * @return 
+     */
     public String doPost(String url, Object params, Map<String, String> headerList) {
         log.debug("doPost => " + params.toString());
         String res = null;
         try {
             int timeout = 30;
+            // Устанавливаем параметры соединения для передачи poat - запроса
             RequestConfig config = RequestConfig.custom()
                     .setConnectTimeout(timeout * 1000)
                     .setConnectionRequestTimeout(timeout * 1000)
                     .setSocketTimeout(timeout * 1000).build();
 
-            HttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
-
-            //Gson gson = new Gson();
+            HttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();            
             HttpPost post = new HttpPost(url);
-            // Р”РѕР±Р°РІР»СЏРµРј РґР°РЅРЅС‹Рµ РІ С„РѕСЂРјР°С‚Рµ xml
-
-            //StringEntity postingString = new StringEntity("contactEmail=andr_vasil@mail.ru", "text/plain", "UTF-8");
+            
+            // Добавляем параметны
             StringEntity postingString = new StringEntity((String) params, "application/xml", "UTF-8");
             log.debug(postingString.toString());
             post.setEntity(postingString);
 
+            // Добавляем заголовки
             if (headerList != null) {
                 headerList.entrySet().stream().forEach((t) -> {
-                    Header header = new BasicHeader(t.getKey(), t.getValue());
-                    //System.out.println("header => " + header);
+                    Header header = new BasicHeader(t.getKey(), t.getValue());                    
                     post.setHeader(header);
                 });
             }
+            
             HttpResponse response = httpClient.execute(post);
-
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
             String line = "";
             StringBuilder json = new StringBuilder();
