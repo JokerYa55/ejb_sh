@@ -14,12 +14,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import rtk.eip_sheduler.beans.UserEntity;
 
 /**
  *
  * @author vasiliy.andricov
  */
+
 public class utlEipTest {
 
     private static  String username;
@@ -54,6 +56,7 @@ public class utlEipTest {
      *
      * @throws java.net.MalformedURLException
      */
+    @Ignore
     @Test
     public void testAddUser() {
         System.out.println("TEST addUser");
@@ -82,6 +85,7 @@ public class utlEipTest {
     /**
      * Test of updateUser method, of class utlEip.
      */
+    @Ignore
     @Test
     public void testUpdateUser() {
         System.out.println("updateUser");
@@ -115,6 +119,7 @@ public class utlEipTest {
     /**
      * Test of changePassword method, of class utlEip.
      */
+    @Ignore
     @Test
     public void testChangePassword() {
         System.out.println("changePassword");
