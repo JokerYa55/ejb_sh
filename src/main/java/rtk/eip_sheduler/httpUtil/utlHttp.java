@@ -3,7 +3,7 @@
  */
 package rtk.eip_sheduler.httpUtil;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -188,61 +188,61 @@ public class utlHttp {
         return res;
     }
 
-    /**
-     * Реализация PUT запроса
-     * @param url
-     * @param params
-     * @param headerList
-     * @return
-     */
-    public int doPut(/*String data,*/String url, Object params, Map<String, String> headerList) {
-        System.out.println("doPut => " + url + " param = " + params);
-        int responseCode = -1;
-        HttpClient httpClient = new DefaultHttpClient();
-        try {
-            HttpPut request = new HttpPut(url);
-
-            // Set PARAMS
-            if (params != null) {
-                Gson gson = new Gson();
-                StringEntity paramStr = new StringEntity(gson.toJson(params), "UTF-8");
-                request.setEntity(paramStr);
-            }
-
-            // Set HEADERS
-            if (headerList != null) {
-                headerList.entrySet().stream().forEach((t) -> {
-                    Header header = new BasicHeader(t.getKey(), t.getValue());
-                    request.setHeader(header);
-                });
-            }
-
-            HttpResponse response = httpClient.execute(request);
-            responseCode = response.getStatusLine().getStatusCode();
-            System.out.println("responseCode = " + responseCode);
-            if (response.getStatusLine().getStatusCode() == 200 || response.getStatusLine().getStatusCode() == 204) {
-                if (responseCode != 204) {
-                    BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent()), "UTF-8"));
-                    System.out.println("br = " + br);
-                    String output;
-                    // System.out.println("Output from Server ...." + response.getStatusLine().getStatusCode() + "\n");
-                    while ((output = br.readLine()) != null) {
-                        System.out.println(output);
-                    }
-                    System.out.println("output = " + output);
-                }
-            } else {
-                System.out.println(response.getStatusLine().getStatusCode());
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + response.getStatusLine().getStatusCode());
-            }
-        } catch (Exception ex) {
-            log.error("ex Code sendPut: " + ex);
-            log.error("url:" + url);
-            log.error("data:" + params);            
-        } finally {
-            httpClient.getConnectionManager().shutdown();
-        }
-        return responseCode;
-    }
+//    /**
+//     * Реализация PUT запроса
+//     * @param url
+//     * @param params
+//     * @param headerList
+//     * @return
+//     */
+//    public int doPut(/*String data,*/String url, Object params, Map<String, String> headerList) {
+//        System.out.println("doPut => " + url + " param = " + params);
+//        int responseCode = -1;
+//        HttpClient httpClient = new DefaultHttpClient();
+//        try {
+//            HttpPut request = new HttpPut(url);
+//
+//            // Set PARAMS
+//            if (params != null) {
+//                Gson gson = new Gson();
+//                StringEntity paramStr = new StringEntity(gson.toJson(params), "UTF-8");
+//                request.setEntity(paramStr);
+//            }
+//
+//            // Set HEADERS
+//            if (headerList != null) {
+//                headerList.entrySet().stream().forEach((t) -> {
+//                    Header header = new BasicHeader(t.getKey(), t.getValue());
+//                    request.setHeader(header);
+//                });
+//            }
+//
+//            HttpResponse response = httpClient.execute(request);
+//            responseCode = response.getStatusLine().getStatusCode();
+//            System.out.println("responseCode = " + responseCode);
+//            if (response.getStatusLine().getStatusCode() == 200 || response.getStatusLine().getStatusCode() == 204) {
+//                if (responseCode != 204) {
+//                    BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent()), "UTF-8"));
+//                    System.out.println("br = " + br);
+//                    String output;
+//                    // System.out.println("Output from Server ...." + response.getStatusLine().getStatusCode() + "\n");
+//                    while ((output = br.readLine()) != null) {
+//                        System.out.println(output);
+//                    }
+//                    System.out.println("output = " + output);
+//                }
+//            } else {
+//                System.out.println(response.getStatusLine().getStatusCode());
+//                throw new RuntimeException("Failed : HTTP error code : "
+//                        + response.getStatusLine().getStatusCode());
+//            }
+//        } catch (Exception ex) {
+//            log.error("ex Code sendPut: " + ex);
+//            log.error("url:" + url);
+//            log.error("data:" + params);            
+//        } finally {
+//            httpClient.getConnectionManager().shutdown();
+//        }
+//        return responseCode;
+//    }
 }
