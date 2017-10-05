@@ -5,15 +5,11 @@
  */
 package ru.test.ejb_sh;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import javax.ejb.Local;
 import javax.ejb.Lock;
 import org.jboss.logging.Logger;
