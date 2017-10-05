@@ -10,11 +10,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.Local;
 import javax.ejb.Lock;
 import org.jboss.logging.Logger;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.ejb.Timer;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -45,21 +48,32 @@ public class shadulerExec {
     @PersistenceContext(unitName = "elk_sh_jpa")
     protected EntityManager em;
 
+    @PostConstruct
+    public void postConstruct() {
+        log.debug("postConstruct");
+    }
+
+    @PreDestroy
+    private void preDestriy() {
+         log.debug("preDestriy");
+    }
+
     @Schedule(minute = "*/1", hour = "*")
     @Lock
-    public void runSh() {
+    public void runSh(Timer time) {
         try {
-
-            log.debug("***************************************************************************************");
-            log.debug("\tStart => " + (new Date()).toString());
-
+            
+            log.info("\n\n********************************* " + new Date() + " ******************************************************");
+            log.info("\tSTART \t\t\t=> " + (new Date()).toString());            
+            log.info("\tNEXT START \t\t=> " + time.getNextTimeout());            
+            
             String url = getAppParams("url", "null");
             log.info("URL = " + url);
             String sendCount = getAppParams("max_send_count", "10");
             log.info("send_count = " + sendCount);
             String maxRecUserLog = getAppParams("max_rec_user_log", "30");
             log.info("max_rec_user_log = " + maxRecUserLog);
-            
+
             utlEip Eip = new utlEip(new URL(url));
 
             //i++;
@@ -86,9 +100,8 @@ public class shadulerExec {
             //log.debug("\tURL => " + url);
 //            "http://192.168.1.150:8080/elkAdminRest/elkadm/addUser1"
 //            utlEip Eip = new utlEip(new URL(url));
-
 //            utlEip Eip = new utlEip(new URL("http://10.31.70.120/elkProxy"));
-            log.info("\n\n********************************* " + new Date() + " ******************************************************");
+            
             log.info("\tStart => " + (new Date()).toString());
 
             Map<String, Object> param = new HashMap<>();
