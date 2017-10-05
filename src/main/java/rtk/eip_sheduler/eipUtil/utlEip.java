@@ -7,7 +7,7 @@ package rtk.eip_sheduler.eipUtil;
 
 import java.net.URL;
 import rtk.eip_sheduler.beans.UserEntity;
-import org.apache.log4j.Logger;
+import org.jboss.logging.Logger;
 import rtk.eip.params.addUserParam;
 
 import rtk.eip.params.changePasswordParam;

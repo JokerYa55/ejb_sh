@@ -22,7 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import org.apache.log4j.Logger;
+import org.jboss.logging.Logger;
 
 /**
  *
