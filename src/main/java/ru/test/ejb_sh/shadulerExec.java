@@ -43,7 +43,7 @@ public class shadulerExec {
 
     private final Logger log = Logger.getLogger(getClass().getName());
     private final long i = 0;
-    private final String propFileName = "app.properties";
+    //private final String propFileName = "app.properties";
 
     @PersistenceContext(unitName = "elk_sh_jpa")
     protected EntityManager em;
@@ -66,7 +66,7 @@ public class shadulerExec {
             log.info("\n\n********************************* " + new Date() + " ******************************************************");
             log.info("\tSTART \t\t\t=> " + (new Date()).toString());            
             log.info("\tNEXT START \t\t=> " + time.getNextTimeout());            
-            
+                                                            
             String url = getAppParams("url", "null");
             log.info("URL = " + url);
             String sendCount = getAppParams("max_send_count", "10");
@@ -74,34 +74,7 @@ public class shadulerExec {
             String maxRecUserLog = getAppParams("max_rec_user_log", "30");
             log.info("max_rec_user_log = " + maxRecUserLog);
 
-            utlEip Eip = new utlEip(new URL(url));
-
-            //i++;
-//            log.debug("***************************************************************************************");
-//            log.debug("\tStart => " + (new Date()).toString());
-//
-//            AppPropertiesDAO appDAO = new AppPropertiesDAO(em);
-//            AppProperties prop = appDAO.getItem("url");
-//            String url = prop.getParam_value();
-//
-//            log.info("URL = " + url);
-//
-//            prop = null;
-//            prop = appDAO.getItem("max_send_count");
-//            String sendCount = prop.getParam_value();
-//
-//            log.info("send_count = " + sendCount);
-//
-//            prop = null;
-//            prop = appDAO.getItem("max_rec_user_log");
-//            String maxRecUserLog = prop.getParam_value();
-//
-//            log.info("max_rec_user_log = " + maxRecUserLog);
-            //log.debug("\tURL => " + url);
-//            "http://192.168.1.150:8080/elkAdminRest/elkadm/addUser1"
-//            utlEip Eip = new utlEip(new URL(url));
-//            utlEip Eip = new utlEip(new URL("http://10.31.70.120/elkProxy"));
-            
+            utlEip Eip = new utlEip(new URL(url));                      
             log.info("\tStart => " + (new Date()).toString());
 
             Map<String, Object> param = new HashMap<>();
