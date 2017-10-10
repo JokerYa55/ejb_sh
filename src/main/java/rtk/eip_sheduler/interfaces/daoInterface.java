@@ -8,6 +8,7 @@ package rtk.eip_sheduler.interfaces;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
@@ -99,8 +100,10 @@ public interface daoInterface<T, V> {
             TypedQuery<T> namedQuery = em.createNamedQuery(jpqName, cl);
             namedQuery.setParameter("id", id);
             res = namedQuery.getSingleResult();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NoResultException e) {
+            System.out.println("NoDataFound");
+        } catch (Exception e1) {
+            e1.printStackTrace();
         }
         return res;
     }

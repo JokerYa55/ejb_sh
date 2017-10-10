@@ -55,18 +55,18 @@ public class shadulerExec {
 
     @PreDestroy
     private void preDestriy() {
-         log.debug("preDestriy");
+        log.debug("preDestriy");
     }
 
     @Schedule(minute = "*/1", hour = "*")
     @Lock
     public void runSh(Timer time) {
         try {
-            
+
             log.info("\n\n********************************* " + new Date() + " ******************************************************");
-            log.info("\tSTART \t\t\t=> " + (new Date()).toString());            
-            log.info("\tNEXT START \t\t=> " + time.getNextTimeout());            
-                                                            
+            log.info("\tSTART \t\t\t=> " + (new Date()).toString());
+            log.info("\tNEXT START \t\t=> " + time.getNextTimeout());
+
             String url = getAppParams("url", "null");
             log.info("URL = " + url);
             String sendCount = getAppParams("max_send_count", "10");
@@ -74,7 +74,7 @@ public class shadulerExec {
             String maxRecUserLog = getAppParams("max_rec_user_log", "30");
             log.info("max_rec_user_log = " + maxRecUserLog);
 
-            utlEip Eip = new utlEip(new URL(url));                      
+            utlEip Eip = new utlEip(new URL(url));
             log.info("\tStart => " + (new Date()).toString());
 
             Map<String, Object> param = new HashMap<>();
@@ -98,6 +98,7 @@ public class shadulerExec {
                         Element root;
                         String resultCode;
                         String lastCommand;
+                        String resultComment;
 
                         switch (item.getOperType().toUpperCase()) {
                             case "I":
@@ -110,14 +111,18 @@ public class shadulerExec {
                                 resultCode = root.getAttribute("resultCode");
                                 lastCommand = root.getAttribute("lastCommand");
                                 item.setLast_command(lastCommand);
+                                resultComment = root.getAttribute("resultComment");
                                 log.info("resultCode = " + resultCode);
                                 if (resultCode.equals("0")) {
                                     item.setFlag(true);
+                                    item.setSend_count(item.getSend_count() + 1);
+                                } else if (resultCode.equals("-1")) {
+                                    log.log(Logger.Level.WARN, resultComment);
                                 } else {
                                     item.setFlag(false);
-                                    //item.setSend_count(item.getSend_count() + 1);
+                                    item.setSend_count(item.getSend_count() + 1);
                                 }
-                                item.setSend_count(item.getSend_count() + 1);
+
                                 break;
                             case "U":
                                 // Если поменялся пароль
