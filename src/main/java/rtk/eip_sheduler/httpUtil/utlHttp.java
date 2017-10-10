@@ -42,7 +42,7 @@ public class utlHttp {
         log.debug("doPost => " + params.toString());
         String res = null;
         try {
-            int timeout = 30;
+            int timeout = 20;
             // Устанавливаем параметры соединения для передачи poat - запроса
             RequestConfig config = RequestConfig.custom()
                     .setConnectTimeout(timeout * 1000)
