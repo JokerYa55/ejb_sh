@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Local;
 import javax.ejb.Lock;
+import javax.ejb.LockType;
 import org.jboss.logging.Logger;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -59,7 +60,7 @@ public class shadulerExec {
     }
 
     @Schedule(minute = "*/1", hour = "*")
-    @Lock
+    @Lock(LockType.READ)
     public void runSh(Timer time) {
         try {
 
