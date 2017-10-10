@@ -86,7 +86,7 @@ public class utlEip {
      * @return
      */
     public String updateUser(UserEntity user) {
-        log.info("UPD_USER");
+        log.info("******************** UPD_USER *******************************");
         String res = null;
         
         try {
