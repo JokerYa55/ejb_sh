@@ -90,6 +90,9 @@ public class shadulerExec {
                 try {
                     log.info("\t\t---------------------------- log record => " + item + " --------------------------");
                     UserEntity user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
+
+                    log.debug("\t\t\tuser => " + user.toString() + " userID => " + item.getUserId().toString());
+
                     if (user != null) {
                         log.info("\t\t\tuser => " + user);
 
@@ -103,24 +106,34 @@ public class shadulerExec {
                         switch (item.getOperType().toUpperCase()) {
                             case "I":
                                 res = Eip.addUser(user);
-                                item.setLast_res(res);
-                                resXml = stringToXml(res);
-                                log.info(resXml);
-                                root = resXml.getDocumentElement();
-                                log.info("resXml = " + utlXML.xmlToString(resXml));
-                                resultCode = root.getAttribute("resultCode");
-                                lastCommand = root.getAttribute("lastCommand");
-                                item.setLast_command(lastCommand);
-                                resultComment = root.getAttribute("resultComment");
-                                log.info("resultCode = " + resultCode);
-                                if (resultCode.equals("0")) {
-                                    item.setFlag(true);
-                                    item.setSend_count(item.getSend_count() + 1);
-                                } else if (resultCode.equals("-1")) {
-                                    log.log(Logger.Level.WARN, resultComment);
+                                if (res != null) {
+                                    item.setLast_res(res);
+                                    resXml = stringToXml(res);
+                                    log.info(resXml);
+                                    root = resXml.getDocumentElement();
+                                    log.info("resXml = " + utlXML.xmlToString(resXml));
+                                    resultCode = root.getAttribute("resultCode");
+                                    lastCommand = root.getAttribute("lastCommand");
+                                    item.setLast_command(lastCommand);
+                                    resultComment = root.getAttribute("resultComment");
+                                    log.info("resultCode = " + resultCode);
+                                    switch (resultCode) {
+                                        case "0":
+                                            item.setFlag(true);
+                                            item.setSend_count(item.getSend_count() + 1);
+                                            break;
+                                        case "-1":
+                                            log.log(Logger.Level.WARN, resultComment);
+                                            break;
+                                        default:
+                                            item.setFlag(false);
+                                            item.setSend_count(item.getSend_count() + 1);
+                                            break;
+                                    }
                                 } else {
-                                    item.setFlag(false);
-                                    item.setSend_count(item.getSend_count() + 1);
+                                    log.error("ADD_USER RES => NULL");
+                                    item.setFlag(true);
+                                    item.setLast_res("ADD_USER RES => NULL");
                                 }
 
                                 break;
@@ -130,24 +143,7 @@ public class shadulerExec {
 //                            Matcher m = p.matcher(item.getInfo());
 
                                 res = Eip.updateUser(user);
-                                item.setLast_res(res);
-                                resXml = stringToXml(res);
-                                log.info(resXml);
-                                root = resXml.getDocumentElement();
-                                log.info("resXml = " + utlXML.xmlToString(resXml));
-                                resultCode = root.getAttribute("resultCode");
-                                lastCommand = root.getAttribute("lastCommand");
-                                item.setLast_command(lastCommand);
-                                log.info("resultCode = " + resultCode);
-                                if (resultCode.equals("0")) {
-                                    item.setFlag(true);
-                                } else {
-                                    item.setFlag(false);
-                                }
-                                item.setSend_count(item.getSend_count() + 1);
-                                // Обновляем если пароль
-                                if (item.getInfo().contains("<password>")) {
-                                    res = Eip.changePassword(user);
+                                if (res != null) {
                                     item.setLast_res(res);
                                     resXml = stringToXml(res);
                                     log.info(resXml);
@@ -155,14 +151,44 @@ public class shadulerExec {
                                     log.info("resXml = " + utlXML.xmlToString(resXml));
                                     resultCode = root.getAttribute("resultCode");
                                     lastCommand = root.getAttribute("lastCommand");
+                                    resultComment = root.getAttribute("resultComment");
                                     item.setLast_command(lastCommand);
                                     log.info("resultCode = " + resultCode);
-                                    if (resultCode.equals("0")) {
-                                        item.setFlag(true);
-                                    } else {
-                                        item.setFlag(false);
+                                    switch (resultCode) {
+                                        case "0":
+                                            item.setFlag(true);
+                                            break;
+                                        case "-1":
+                                            log.log(Logger.Level.WARN, resultComment);
+                                            break;
+                                        default:
+                                            item.setFlag(false);
+                                            break;
                                     }
                                     item.setSend_count(item.getSend_count() + 1);
+                                    // Обновляем если пароль
+                                    if (item.getInfo().contains("<password>")) {
+                                        res = Eip.changePassword(user);
+                                        item.setLast_res(res);
+                                        resXml = stringToXml(res);
+                                        log.info(resXml);
+                                        root = resXml.getDocumentElement();
+                                        log.info("resXml = " + utlXML.xmlToString(resXml));
+                                        resultCode = root.getAttribute("resultCode");
+                                        lastCommand = root.getAttribute("lastCommand");
+                                        item.setLast_command(lastCommand);
+                                        log.info("resultCode = " + resultCode);
+                                        if (resultCode.equals("0")) {
+                                            item.setFlag(true);
+                                        } else {
+                                            item.setFlag(false);
+                                        }
+                                        item.setSend_count(item.getSend_count() + 1);
+                                    }
+                                } else {
+                                    log.error("UPD_USER RES => NULL");
+                                    item.setFlag(true);
+                                    item.setLast_res("ADD_USER RES => NULL");
                                 }
                                 break;
                             case "D":

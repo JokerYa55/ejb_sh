@@ -96,6 +96,7 @@ public interface daoInterface<T, V> {
     default public T getItem(long id, String jpqName, Class<T> cl) {
         T res = null;
         try {
+            System.out.println("id => " + id);
             EntityManager em = getEM();
             TypedQuery<T> namedQuery = em.createNamedQuery(jpqName, cl);
             namedQuery.setParameter("id", id);

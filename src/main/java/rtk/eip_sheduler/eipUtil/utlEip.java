@@ -73,9 +73,10 @@ public class utlEip {
             //.replaceAll("<?", "{").replaceAll("?>", "}")
             res = resBuf.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Logger.Level.WARN, e);
         }
         log.debug("res = " + res);
+        log.info("****************** END ADD_USER *********************************");
         return res;
     }
 
@@ -133,10 +134,10 @@ public class utlEip {
             res = resBuf.toString();
             
         } catch (Exception e) {
-            log.error(e.getMessage());
+             log.log(Logger.Level.WARN, e);
         }
         log.info("res = " + res);
-        log.info("***************************************************");
+        log.info("******************** END UPD_USER *******************************");
         return res;
     }
 
