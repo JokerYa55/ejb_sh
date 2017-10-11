@@ -63,8 +63,8 @@ public class shadulerExec {
         try {
 
             log.info("\n\n********************************* " + new Date() + " ******************************************************");
-            log.info("\tSTART \t\t\t=> " + (new Date()).toString());
-            log.info("\tNEXT START \t\t=> " + time.getNextTimeout());
+            log.info("START \t\t\t=> " + (new Date()).toString());
+            log.info("NEXT START \t\t=> " + time.getNextTimeout());
 
             String url = getAppParams("url", "null");
             log.info("URL = " + url);
@@ -74,7 +74,7 @@ public class shadulerExec {
             log.info("max_rec_user_log = " + maxRecUserLog);
 
             utlEip Eip = new utlEip(new URL(url));
-            log.info("\tStart => " + (new Date()).toString());
+            log.info("Start => " + (new Date()).toString());
 
             Map<String, Object> param = new HashMap<>();
             param.put("flag", false);
@@ -87,7 +87,7 @@ public class shadulerExec {
 
             for (UsersLog item : logList) {
                 try {
-                    log.info("\t\t************************** LOG RECORD BEGIN *****************************");
+                    log.info("************************** LOG RECORD BEGIN *****************************");
                     log.log(Logger.Level.INFO, "item => " + item);
                     UserEntity user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
 
@@ -199,7 +199,7 @@ public class shadulerExec {
                         item.setFlag(true);
                         item.setInfo("<NO User id = " + item.getUserId() + " name = " + item.getUsername() + ">");
                     }
-                    log.info("\t\t************************** LOG RECORD END *****************************");
+                    log.info("************************** LOG RECORD END *****************************");
                 } catch (Exception ex1) {
                     log.error(ex1.getMessage());
                 }
