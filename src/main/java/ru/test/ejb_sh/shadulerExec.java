@@ -13,8 +13,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Local;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import org.jboss.logging.Logger;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -89,7 +87,7 @@ public class shadulerExec {
 
             for (UsersLog item : logList) {
                 try {
-                    log.info("\t\t---------------------------- log record => " + item + " --------------------------");
+                    log.info("\t\t*********************************** LOG RECORD BEGIN => " + item + " *****************************");
                     UserEntity user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
 
                     log.debug("\t\t\tuser => " + user.toString() + " userID => " + item.getUserId().toString());
@@ -200,6 +198,7 @@ public class shadulerExec {
                         item.setFlag(true);
                         item.setInfo("<NO User id = " + item.getUserId() + " name = " + item.getUsername() + ">");
                     }
+                    log.info("\t\t*********************************** LOG RECORD END => " + item + " *****************************");
                 } catch (Exception ex1) {
                     log.error(ex1.getMessage());
                 }
