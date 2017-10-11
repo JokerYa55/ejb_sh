@@ -60,7 +60,7 @@ public class shadulerExec {
     }
 
     @Schedule(minute = "*/1", hour = "*")
-    @Lock(LockType.READ)
+    //@Lock(LockType.READ)
     public void runSh(Timer time) {
         try {
 
