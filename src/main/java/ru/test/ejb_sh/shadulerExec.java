@@ -91,10 +91,10 @@ public class shadulerExec {
                     log.log(Logger.Level.INFO, "item => " + item);
                     UserEntity user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
 
-                    log.debug("\t\t\tuser => " + user.toString() + " userID => " + item.getUserId().toString());
+                    log.debug("user => " + user.toString());
 
                     if (user != null) {
-                        log.info("\t\t\tuser => " + user);
+                        //log.info("tuser => " + user);
 
                         String res = null;
                         Document resXml = null;

@@ -370,7 +370,7 @@ public class UserEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "UserEntity{" + "id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", thirdName=" + thirdName + ", email=" + email + ", password=" + password + ", phone=" + phone + ", hash_type=" + hash_type + ", salt=" + salt + ", user_status=" + user_status + ", user_region=" + user_region + ", description=" + description + '}';
+        return "UserEntity{" + "id=" + id + ",\n\t username=" + username + ",\n\t firstName=" + firstName + ",\n\t lastName=" + lastName + ",\n\t thirdName=" + thirdName + ",\n\t email=" + email + ",\n\t password=" + password + ",\n\t phone=" + phone + ",\n\t hash_type=" + hash_type + ",\n\t salt=" + salt + ",\n\t user_status=" + user_status + ",\n\t user_region=" + user_region + ",\n\t description=" + description + '}';
     }
     
     

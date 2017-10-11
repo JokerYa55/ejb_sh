@@ -185,7 +185,7 @@ public class UsersLog implements Serializable {
 
     @Override
     public String toString() {
-        return "UsersLog{" + "id=" + id + ", flag=" + flag + ", operType=" + operType + ", userId=" + userId + ", username=" + username + ", dateOper=" + dateOper + ", send_count=" + send_count + ", info=" + info + ", last_command=" + last_command + ", last_res=" + last_res + '}';
+        return "\nUsersLog{" + "id=" + id + ",\n\t flag=" + flag + ",\n\t operType=" + operType + ",\n\t userId=" + userId + ",\n\t username=" + username + ",\n\t dateOper=" + dateOper + ",\n\t send_count=" + send_count + ",\n\t info=" + info + ",\n\t last_command=" + last_command + ",\n\t last_res=" + last_res + '}';
     }
 
 }

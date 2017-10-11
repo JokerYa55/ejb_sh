@@ -86,7 +86,7 @@ public class result {
 
     @Override
     public String toString() {
-        return "result{" + "resultCode=" + resultCode + ", resultComment=" + resultComment + ", lastCommand=" + lastCommand + '}';
+        return "result{\n\t" + "resultCode=" + resultCode + ",\n\t resultComment=" + resultComment + ",\n\t lastCommand=" + lastCommand + '}';
     }
 
 }
