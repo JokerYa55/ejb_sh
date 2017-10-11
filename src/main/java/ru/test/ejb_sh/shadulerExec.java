@@ -87,7 +87,8 @@ public class shadulerExec {
 
             for (UsersLog item : logList) {
                 try {
-                    log.info("\t\t*********************************** LOG RECORD BEGIN => " + item + " *****************************");
+                    log.info("\t\t************************** LOG RECORD BEGIN *****************************");
+                    log.log(Logger.Level.INFO, "item => " + item);
                     UserEntity user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
 
                     log.debug("\t\t\tuser => " + user.toString() + " userID => " + item.getUserId().toString());
@@ -198,7 +199,7 @@ public class shadulerExec {
                         item.setFlag(true);
                         item.setInfo("<NO User id = " + item.getUserId() + " name = " + item.getUsername() + ">");
                     }
-                    log.info("\t\t*********************************** LOG RECORD END => " + item + " *****************************");
+                    log.info("\t\t************************** LOG RECORD END *****************************");
                 } catch (Exception ex1) {
                     log.error(ex1.getMessage());
                 }
