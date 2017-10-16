@@ -59,7 +59,6 @@ public class utlEip {
             } else {
                 log.warn("Не определен регион");
             }
-
             utlHttp http = new utlHttp();
             utlXML utlxml = new utlXML();
 
