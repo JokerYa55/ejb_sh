@@ -40,19 +40,25 @@ public class utlEip {
         try {
             addUserParam param = new addUserParam();
             param.setContactEmail(user.getEmail());
-            if (user.getPhone().length() != 10) {
+            if (user.getPhone().length() > 10) {
                 log.warn("Неврная длина номера телефона : " + user.getPhone() + " len = " + user.getPhone().length());
-                param.setContactPhone(user.getPhone().substring(2));
+                param.setContactPhone(user.getPhone().substring(1));
             } else {
                 param.setContactPhone(user.getPhone());
             }
             param.setReqType("CREATE_USER_PASSWORD");
             param.setSalt(user.getSalt());
             param.setHash(user.getPassword());
-            param.setHash_type(user.getHash_type().toUpperCase());
+            param.setHash_type(user.getHash_type().toUpperCase());            
             param.setUser(user.getUsername());
-            param.setSurname(user.getFirstName());
-            param.setName(user.getLastName());
+            
+            // Имя
+            param.setName(user.getFirstName());
+            
+            // Фамилия
+            param.setSurname(user.getLastName());
+            
+            
             param.setPatronymic(user.getThirdName());
             if (user.getUser_region() != null) {
                 param.setRegion(user.getUser_region().toString());
@@ -96,9 +102,9 @@ public class utlEip {
                 param.setContactEmail(user.getEmail());
             }
             if (user.getPhone() != null) {
-                if (user.getPhone().length() != 10) {
+                if (user.getPhone().length() > 10) {
                     log.warn("Неврная длина номера телефона : " + user.getPhone() + " len = " + user.getPhone().length());
-                    param.setContactPhone(user.getPhone().substring(2));
+                    param.setContactPhone(user.getPhone().substring(1));
                 } else {
                     param.setContactPhone(user.getPhone());
                 }
@@ -109,12 +115,16 @@ public class utlEip {
             if (user.getUsername() != null) {
                 param.setUser(user.getUsername());
             }
+            
+            // Имя
             if (user.getFirstName() != null) {
-                param.setSurname(user.getFirstName());
+                param.setName(user.getFirstName());
                 
             }
+            
+            // Фамилия
             if (user.getLastName() != null) {
-                param.setName(user.getLastName());
+                param.setSurname(user.getLastName());
             }
             
             if (user.getThirdName() != null) {
