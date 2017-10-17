@@ -132,7 +132,8 @@ public class shadulerExec {
                                     }
                                 } else {
                                     log.error("ADD_USER RES => NULL");
-                                    item.setFlag(true);
+                                    item.setFlag(false);
+                                    item.setSend_count(item.getSend_count()+1);
                                     item.setLast_res("ADD_USER RES => NULL");
                                 }
 
@@ -187,8 +188,9 @@ public class shadulerExec {
                                     }
                                 } else {
                                     log.error("UPD_USER RES => NULL");
-                                    item.setFlag(true);
-                                    item.setLast_res("ADD_USER RES => NULL");
+                                    item.setFlag(false);
+                                    item.setSend_count(item.getSend_count()+1);
+                                    item.setLast_res("UPD_USER RES => NULL");
                                 }
                                 break;
                             case "D":

@@ -35,7 +35,7 @@ public class utlEip {
      * @return
      */
     public String addUser(UserEntity user) {
-        log.info("ADD_USER");
+        log.info("ADD_USER => " + user);
         String res = null;
         try {
             addUserParam param = new addUserParam();
