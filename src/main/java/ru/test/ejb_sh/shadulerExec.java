@@ -126,7 +126,7 @@ public class shadulerExec {
                                             log.log(Logger.Level.WARN, resultComment);
                                             break;
                                         case "36":
-                                            item.setFlag(false);
+                                            item.setFlag(true);
                                             item.setSend_count(1000);
                                             break;
                                         default:
