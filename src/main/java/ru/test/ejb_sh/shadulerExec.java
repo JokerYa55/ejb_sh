@@ -125,6 +125,10 @@ public class shadulerExec {
                                         case "-1":
                                             log.log(Logger.Level.WARN, resultComment);
                                             break;
+                                        case "36":
+                                            item.setFlag(false);
+                                            item.setSend_count(1000);
+                                            break;
                                         default:
                                             item.setFlag(false);
                                             item.setSend_count(item.getSend_count() + 1);
@@ -133,7 +137,7 @@ public class shadulerExec {
                                 } else {
                                     log.error("ADD_USER RES => NULL");
                                     item.setFlag(false);
-                                    item.setSend_count(item.getSend_count()+1);
+                                    item.setSend_count(item.getSend_count() + 1);
                                     item.setLast_res("ADD_USER RES => NULL");
                                 }
 
@@ -189,7 +193,7 @@ public class shadulerExec {
                                 } else {
                                     log.error("UPD_USER RES => NULL");
                                     item.setFlag(false);
-                                    item.setSend_count(item.getSend_count()+1);
+                                    item.setSend_count(item.getSend_count() + 1);
                                     item.setLast_res("UPD_USER RES => NULL");
                                 }
                                 break;
