@@ -81,8 +81,8 @@ public class shadulerExec {
             param.put("send_count", new Integer(sendCount));
             param.put("limit", new Integer(maxRecUserLog));
             List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class, param);
-            
-            log.info("\tlog record count => " + logList.size());            
+
+            log.info("\tlog record count => " + logList.size());
             for (UsersLog item : logList) {
                 try {
                     log.info("************************** LOG RECORD BEGIN *****************************");
@@ -90,7 +90,7 @@ public class shadulerExec {
                     UserEntity user = null;
                     try {
                         log.info("\tGET USER REC => ");
-                        user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);                        
+                        user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
                     } catch (Exception e11) {
                         log.log(Logger.Level.ERROR, "getuser error => ");
                         log.log(Logger.Level.ERROR, e11);
@@ -141,9 +141,9 @@ public class shadulerExec {
                                     }
                                 } else {
                                     log.error("ADD_USER RES => NULL");
-                                    item.setFlag(false);
+                                    item.setFlag(true);
                                     item.setSend_count(item.getSend_count() + 1);
-                                    item.setLast_res("ADD_USER RES => NULL (" + resultCode + ")");
+                                    item.setLast_res("ADD_USER RES => NULL");
                                 }
 
                                 break;
@@ -209,11 +209,18 @@ public class shadulerExec {
                     } else {
                         item.setFlag(true);
                         item.setInfo("<NO User id = " + item.getUserId() + " name = " + item.getUsername() + ">");
+                        item.setLast_res("USER => NULL");
                     }
                     log.info("************************** LOG RECORD END *****************************");
-                } catch (Exception ex1) {
-                    log.error("LOG RECORD BEGIN ERROR");
-                    log.error(ex1.getMessage());
+                } catch (NullPointerException ex1) {
+                    log.log(Logger.Level.ERROR, ex1);
+                    log.error("USER => NULL");
+                    item.setFlag(true);
+                    //item.setSend_count(item.getSend_count() + 1);
+                    item.setInfo("<NO User id = " + item.getUserId() + " name = " + item.getUsername() + " in table>");
+                    item.setLast_res("USER => NULL");
+                } catch (Exception ex23) {
+                    log.log(Logger.Level.ERROR, ex23);
                 }
 
                 log.info("\n\n");
