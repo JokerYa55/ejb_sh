@@ -81,17 +81,22 @@ public class shadulerExec {
             param.put("send_count", new Integer(sendCount));
             param.put("limit", new Integer(maxRecUserLog));
             List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class, param);
-            //List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class);
-
-            log.info("\tcount => " + logList.size());
-
+            
+            log.info("\tlog record count => " + logList.size());            
             for (UsersLog item : logList) {
                 try {
                     log.info("************************** LOG RECORD BEGIN *****************************");
-                    log.log(Logger.Level.INFO, "item => " + item);
-                    UserEntity user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);
+                    log.log(Logger.Level.INFO, "log item => " + item);
+                    UserEntity user = null;
+                    try {
+                        log.info("\tGET USER REC => ");
+                        user = (new UserEntityDAO(em)).getItem(item.getUserId(), "userEntity.findById", UserEntity.class);                        
+                    } catch (Exception e11) {
+                        log.log(Logger.Level.ERROR, "getuser error => ");
+                        log.log(Logger.Level.ERROR, e11);
+                    }
 
-                    log.debug("user => " + user.toString());
+                    log.debug("\tuser => " + user.toString());
 
                     if (user != null) {
                         //log.info("tuser => " + user);
@@ -99,7 +104,7 @@ public class shadulerExec {
                         String res = null;
                         Document resXml = null;
                         Element root;
-                        String resultCode;
+                        String resultCode = null;
                         String lastCommand;
                         String resultComment;
 
@@ -138,7 +143,7 @@ public class shadulerExec {
                                     log.error("ADD_USER RES => NULL");
                                     item.setFlag(false);
                                     item.setSend_count(item.getSend_count() + 1);
-                                    item.setLast_res("ADD_USER RES => NULL");
+                                    item.setLast_res("ADD_USER RES => NULL (" + resultCode + ")");
                                 }
 
                                 break;
@@ -207,9 +212,11 @@ public class shadulerExec {
                     }
                     log.info("************************** LOG RECORD END *****************************");
                 } catch (Exception ex1) {
+                    log.error("LOG RECORD BEGIN ERROR");
                     log.error(ex1.getMessage());
                 }
 
+                log.info("\n\n");
                 log.info("item => " + item);
                 //em.merge(item);
                 (new UsersLogDAO(em)).updateItem(item);

@@ -96,13 +96,14 @@ public interface daoInterface<T, V> {
     default public T getItem(long id, String jpqName, Class<T> cl) {
         T res = null;
         try {
-            System.out.println("id => " + id);
+            System.out.println("getItem id => " + id);
             EntityManager em = getEM();
             TypedQuery<T> namedQuery = em.createNamedQuery(jpqName, cl);
             namedQuery.setParameter("id", id);
             res = namedQuery.getSingleResult();
         } catch (NoResultException e) {
-            System.out.println("NoDataFound");
+            System.out.println("getItem => NoDataFound");
+            return null;
         } catch (Exception e1) {
             e1.printStackTrace();
         }
