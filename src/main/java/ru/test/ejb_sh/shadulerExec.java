@@ -77,7 +77,12 @@ public class shadulerExec {
             log.info("START \t\t\t=> " + (new Date()).toString());
             log.info("NEXT START \t\t=> " + time.getNextTimeout());
             log.info("runFlag => " + runFlag);
-            //log.info("class ID => " );
+
+            // Инициализация параметров синхронизации в кластере
+            getAppParams("master", "false");
+            getAppParams("master_id", "0");
+            getAppParams("master_set_time", "0");
+
             isMaster();
 
             if (runFlag) {
@@ -171,14 +176,14 @@ public class shadulerExec {
                                     if (res != null) {
                                         item.setLast_res(res);
                                         resXml = stringToXml(res);
-                                        log.info(resXml);
+                                        log.info(masterID + "\tresXml => " + resXml);
                                         root = resXml.getDocumentElement();
-                                        log.info("resXml = " + utlXML.xmlToString(resXml));
+                                        log.info(masterID + "\tresXml = " + utlXML.xmlToString(resXml));
                                         resultCode = root.getAttribute("resultCode");
                                         lastCommand = root.getAttribute("lastCommand");
                                         resultComment = root.getAttribute("resultComment");
                                         item.setLast_command(lastCommand);
-                                        log.info("resultCode = " + resultCode);
+                                        log.info(masterID + "\tresultCode = " + resultCode);
                                         switch (resultCode) {
                                             case "0":
                                                 item.setFlag(true);
@@ -196,13 +201,13 @@ public class shadulerExec {
                                             res = Eip.changePassword(user);
                                             item.setLast_res(res);
                                             resXml = stringToXml(res);
-                                            log.info(resXml);
+                                            log.info(masterID + "\t" + resXml);
                                             root = resXml.getDocumentElement();
-                                            log.info("resXml = " + utlXML.xmlToString(resXml));
+                                            log.info(masterID + "\tresXml = " + utlXML.xmlToString(resXml));
                                             resultCode = root.getAttribute("resultCode");
                                             lastCommand = root.getAttribute("lastCommand");
                                             item.setLast_command(lastCommand);
-                                            log.info("resultCode = " + resultCode);
+                                            log.info(masterID + "\tresultCode = " + resultCode);
                                             if (resultCode.equals("0")) {
                                                 item.setFlag(true);
                                             } else {
@@ -244,7 +249,7 @@ public class shadulerExec {
                     (new UsersLogDAO(em)).updateItem(item);
                 }
             } else {
-                log.info("Timer run other server.");
+                log.info(masterID + "\tTimer run other server.");
             }
         } catch (Exception e) {
             log.info("e = " + e.getMessage());
@@ -280,16 +285,14 @@ public class shadulerExec {
 
     @Transactional
     private boolean isMaster() {
-        log.info("isMaster");
+        log.info("isMaster => " + masterID);
         boolean res = false;
         try {
             // Блокируем параметры 
             TypedQuery<AppProperties> q = em.createQuery("SELECT t FROM AppProperties t\n"
                     + " WHERE t.param_name LIKE 'master%'", AppProperties.class);
             q.setLockMode(LockModeType.PESSIMISTIC_WRITE);
-
             List<AppProperties> pList = q.getResultList();
-
             pList.forEach(new Consumer<AppProperties>() {
                 @Override
                 public void accept(AppProperties t) {
@@ -307,39 +310,37 @@ public class shadulerExec {
                 }
             });
 
-            log.info("flag => " + this.flag);
-            log.info("dateFlag => " + dateFlag);
+            //log.info("flag => " + this.flag);
+            //log.info("dateFlag => " + dateFlag);
             log.info("masterID => " + masterID);
+            log.info(masterID + "\ttempMasterID => " + tempMasterID);
             long tempDate = Long.parseLong(dateFlag);
             long currentDate = new Date().getTime();
-            log.info("tempDate => " + tempDate);
-            log.info("currentDate => " + currentDate);
+            log.info(masterID + "\ttempDate => " + tempDate);
+            log.info(masterID + "\tcurrentDate => " + currentDate);
 
-            if (flag.equalsIgnoreCase("true")) {
-                // Таймер уже запущен на другом экземляре.
-                // Провеяряем время последнего запуска и если оно больше 120 000 милисекунд то запускаем считаем что таймер запущенный на другом экземляре уже не работает. Запускаем на этом.
-                if (runFlag) {
-                    // Если тимер на данном сервисе уже запущен
-                    log.info("maser => true");
-
-                    pList.forEach(new Consumer<AppProperties>() {
-                        @Override
-                        public void accept(AppProperties t) {
-                            switch (t.getParam_name()) {
-                                case "master_id":
-                                    t.setParam_value(masterID);
-                                    break;
-                                case "master_set_time":
-                                    t.setParam_value(String.valueOf(currentDate));
-                                    break;
-                            }
+            // Проверяем является ли данный сервер активным
+            if (tempMasterID.equalsIgnoreCase(masterID)) {
+                log.info(masterID + "\tCURRENT TIMER");
+                pList.forEach(new Consumer<AppProperties>() {
+                    @Override
+                    public void accept(AppProperties t) {
+                        switch (t.getParam_name()) {
+                            case "master_id":
+                                t.setParam_value(masterID);
+                                break;
+                            case "master_set_time":
+                                t.setParam_value(String.valueOf(currentDate));
+                                break;
                         }
-                    });
-
-                    res = true;
-                } else if ((currentDate - tempDate) > 120000) {
+                    }
+                });
+            } else if (flag.equalsIgnoreCase("true")) {
+                // Если сервер не активный проверяем время последнего обновления
+                if ((currentDate - tempDate) > 120000) {
+                    // Если время последнего обновления больше 2 минут 
                     // Делаем таймер мастером
-                    log.info("setMaster => TRUE");
+                    log.info(masterID + "\tsetMaster => TRUE");
                     pList.forEach(new Consumer<AppProperties>() {
                         @Override
                         public void accept(AppProperties t) {
@@ -368,7 +369,7 @@ public class shadulerExec {
                 // Устанавливаем master = TRUE
                 // master_set_time = текущая дата
                 // Делаем таймер мастером
-                log.info("setMaster => TRUE");
+                log.info(masterID + "\tsetMaster => TRUE");
                 pList.forEach(new Consumer<AppProperties>() {
                     @Override
                     public void accept(AppProperties t) {
