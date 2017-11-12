@@ -89,7 +89,7 @@ public class UserEntity implements Serializable {
     @Column(name = "thirdName", unique = false, nullable = true)
     private String thirdName;
     // e-mail
-    @Column(name = "email", unique = true, nullable = true)
+    @Column(name = "email", unique = false, nullable = true)
     private String email;
     // Пароль
     @Column(name = "password", nullable = true)

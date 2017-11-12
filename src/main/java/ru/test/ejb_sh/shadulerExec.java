@@ -140,10 +140,10 @@ public class shadulerExec {
                                             break;
                                     }
                                 } else {
-                                    log.error("ADD_USER RES => NULL");
+                                    log.error("add_user() res => NULL");
                                     item.setFlag(true);
                                     item.setSend_count(item.getSend_count() + 1);
-                                    item.setLast_res("ADD_USER RES => NULL");
+                                    item.setLast_res("add_user() res => NULL");
                                 }
 
                                 break;
@@ -196,10 +196,10 @@ public class shadulerExec {
                                         item.setSend_count(item.getSend_count() + 1);
                                     }
                                 } else {
-                                    log.error("UPD_USER RES => NULL");
+                                    log.error("upd_user() res => NULL");
                                     item.setFlag(false);
                                     item.setSend_count(item.getSend_count() + 1);
-                                    item.setLast_res("UPD_USER RES => NULL");
+                                    item.setLast_res("upd_user() res => NULL");
                                 }
                                 break;
                             case "D":
