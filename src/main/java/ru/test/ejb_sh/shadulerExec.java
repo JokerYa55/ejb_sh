@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Local;
@@ -18,8 +19,11 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Timer;
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import rtk.eip_sheduler.DAO.AppPropertiesDAO;
@@ -39,49 +43,54 @@ import rtk.eip_sheduler.eipUtil.utlEip;
 @Singleton
 @Local(shadulerExec.class)
 public class shadulerExec {
-
+    
     private final Logger log = Logger.getLogger(getClass().getName());
     private final long i = 0;
     //private final String propFileName = "app.properties";
 
     @PersistenceContext(unitName = "elk_sh_jpa")
     protected EntityManager em;
-
+    
     @PostConstruct
     public void postConstruct() {
         log.debug("postConstruct");
     }
-
+    
     @PreDestroy
     private void preDestriy() {
         log.debug("preDestriy");
     }
-
+    
+    String flag;
+    String dateFlag;
+    
     @Schedule(minute = "*/1", hour = "*")
     //@Lock(LockType.READ)
     public void runSh(Timer time) {
         try {
-
+            
             log.info("\n\n********************************* " + new Date() + " ******************************************************");
             log.info("START \t\t\t=> " + (new Date()).toString());
             log.info("NEXT START \t\t=> " + time.getNextTimeout());
-
+            
+            isMaster();
+            
             String url = getAppParams("url", "null");
             log.info("URL = " + url);
             String sendCount = getAppParams("max_send_count", "10");
             log.info("send_count = " + sendCount);
             String maxRecUserLog = getAppParams("max_rec_user_log", "30");
             log.info("max_rec_user_log = " + maxRecUserLog);
-
+            
             utlEip Eip = new utlEip(new URL(url));
             log.info("Start => " + (new Date()).toString());
-
+            
             Map<String, Object> param = new HashMap<>();
             param.put("flag", false);
             param.put("send_count", new Integer(sendCount));
             param.put("limit", new Integer(maxRecUserLog));
             List<UsersLog> logList = (new UsersLogDAO(em)).getList("UsersLog.findByFlag", UsersLog.class, param);
-
+            
             log.info("\tlog record count => " + logList.size());
             for (UsersLog item : logList) {
                 try {
@@ -95,9 +104,9 @@ public class shadulerExec {
                         log.log(Logger.Level.ERROR, "getuser error => ");
                         log.log(Logger.Level.ERROR, e11);
                     }
-
+                    
                     log.debug("\tuser => " + user.toString());
-
+                    
                     if (user != null) {
                         //log.info("tuser => " + user);
 
@@ -107,7 +116,7 @@ public class shadulerExec {
                         String resultCode = null;
                         String lastCommand;
                         String resultComment;
-
+                        
                         switch (item.getOperType().toUpperCase()) {
                             case "I":
                                 res = Eip.addUser(user);
@@ -145,7 +154,7 @@ public class shadulerExec {
                                     item.setSend_count(item.getSend_count() + 1);
                                     item.setLast_res("add_user() res => NULL");
                                 }
-
+                                
                                 break;
                             case "U":
                                 // Если поменялся пароль
@@ -222,7 +231,7 @@ public class shadulerExec {
                 } catch (Exception ex23) {
                     log.log(Logger.Level.ERROR, ex23);
                 }
-
+                
                 log.info("\n\n");
                 log.info("item => " + item);
                 //em.merge(item);
@@ -256,6 +265,67 @@ public class shadulerExec {
             }
         } catch (Exception e1) {
             log.log(Logger.Level.ERROR, e1);
+        }
+        return res;
+    }
+    
+    @Transactional
+    private boolean isMaster() {
+        log.info("isMaster");
+        boolean res = false;
+        try {
+            // Блокируем параметры 
+            TypedQuery<AppProperties> q = em.createQuery("SELECT t FROM AppProperties t\n"
+                    + " WHERE t.param_name LIKE 'master%'", AppProperties.class);
+            q.setLockMode(LockModeType.PESSIMISTIC_WRITE);
+            
+            List<AppProperties> pList = q.getResultList();
+            
+            pList.forEach(new Consumer<AppProperties>() {
+                @Override
+                public void accept(AppProperties t) {
+                    switch (t.getParam_name()) {
+                        case "master":
+                            flag = t.getParam_value();
+                            break;
+                        case "master_set_time":
+                            dateFlag = t.getParam_value();
+                            break;
+                    }
+                }
+            });
+            
+            log.info("flag => " + this.flag);
+            log.info("dateFlag => " + dateFlag);
+            long tempDate = Long.parseLong(dateFlag);
+            long currentDate = new Date().getTime();
+            log.info("tempDate => " + tempDate);
+            log.info("currentDate => " + currentDate);
+            
+            if (flag.equalsIgnoreCase("true")) {
+                
+            } else {
+                // Тимер не запущен не на одном сервере
+                // Устанавливаем master = TRUE
+                // master_set_time = текущая дата
+                
+                pList.forEach(new Consumer<AppProperties>() {
+                    @Override
+                    public void accept(AppProperties t) {
+                        switch (t.getParam_name()) {
+                            case "master":
+                                t.setParam_value("TRUE");
+                                break;
+                            case "master_set_time":                                
+                                t.setParam_value(String.valueOf(currentDate));                    
+                                break;
+                        }
+                    }
+                });
+                res = true;
+            }
+        } catch (Exception e) {
+            log.log(Logger.Level.ERROR, e);
         }
         return res;
     }
