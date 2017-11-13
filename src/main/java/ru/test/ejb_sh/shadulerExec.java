@@ -65,7 +65,7 @@ public class shadulerExec {
     private String flag;
     private String dateFlag;
     private boolean runFlag = false;
-    private String masterID = UUID.randomUUID().toString();
+    private final String masterID = UUID.randomUUID().toString();
     private String tempMasterID;
 
     @Schedule(minute = "*/1", hour = "*")
@@ -249,7 +249,7 @@ public class shadulerExec {
                     (new UsersLogDAO(em)).updateItem(item);
                 }
             } else {
-                log.info(masterID + "\tTimer run other server.");
+                log.info(masterID + "\tTimer run other server ID => " + tempMasterID);
             }
         } catch (Exception e) {
             log.info("e = " + e.getMessage());
@@ -262,6 +262,7 @@ public class shadulerExec {
      * @param pDefVal
      * @return
      */
+    @Transactional
     private String getAppParams(String pName, String pDefVal) {
         String res = null;
         try {
